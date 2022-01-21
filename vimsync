@@ -12,3 +12,8 @@ curl https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/vimrc > ~/.vim/
 
 curl https://raw.githubusercontent.com/arcticicestudio/nord-konsole/develop/install.sh > ~/.local/share/konsole/install.sh
 chmod +x ~/.local/share/konsole/install.sh
+~/.local/share/konsole/install.sh
+
+# Change keyboard settings
+setxkbmap dvorak
+setxkbmap --option caps:swapescape
