@@ -18,3 +18,4 @@ chmod +x ~/.local/share/konsole/install.sh
 # Change keyboard settings
 setxkbmap dvorak
 setxkbmap --option caps:swapescape
+set -o vi
