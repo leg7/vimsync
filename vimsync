@@ -5,6 +5,7 @@
 if ![ -d ~/.vim ]
 then
 	mkdir ~/.vim
+fi
 
 curl https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/vimrc > ~/.vim/vimrc
 
