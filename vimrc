@@ -1,11 +1,30 @@
-" This vimrc is version is for school comupters
-" so it's missing XDG stuff and installs everything
-" to ~/.vim
+"""""""""""""""""""
+""" XDG SUPPORT """
+"""""""""""""""""""
+" if empty($MYVIMRC) | let $MYVIMRC = expand('<sfile>:p') | endif
+
+" set runtimepath^=$XDG_CONFIG_HOME/vim
+" set runtimepath+=$XDG_DATA_HOME/vim
+" set runtimepath+=$XDG_CONFIG_HOME/vim/after
+
+" set packpath^=$XDG_DATA_HOME/vim,$XDG_CONFIG_HOME/vim
+" set packpath+=$XDG_CONFIG_HOME/vim/after,$XDG_DATA_HOME/vim/after
+
+" let g:netrw_home = $XDG_DATA_HOME."/vim"
+" call mkdir($XDG_DATA_HOME."/vim/spell", 'p', 0700)
+" set viewdir=$XDG_DATA_HOME/vim/view | call mkdir(&viewdir, 'p', 0700)
+
+" set backupdir=$XDG_CACHE_HOME/vim/backup | call mkdir(&backupdir, 'p', 0700)
+" set directory=$XDG_CACHE_HOME/vim/swap   | call mkdir(&directory, 'p', 0700)
+" set undodir=$XDG_CACHE_HOME/vim/undo     | call mkdir(&undodir,   'p', 0700)
+
+" if !has('nvim') | set viminfofile=$XDG_CACHE_HOME/vim/viminfo | endif
+
 """"""""""""""""""""""""
 """ Install vim-plug """
 """"""""""""""""""""""""
 
-let data_dir = '~/.vim'
+let data_dir = '~/.config/vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
 	silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
@@ -14,7 +33,7 @@ endif
 """""""""""""""""""""""""""""
 """ Plugins with vim-plug """
 """""""""""""""""""""""""""""
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.local/share/vim/plugged')
 
 Plug 'arcticicestudio/nord-vim'
 
@@ -35,8 +54,15 @@ call plug#end()
 
 set nocompatible
 filetype plugin on
+set encoding=utf-8
+
+set t_Co=256
+colorscheme nord
 
 runtime! macros/matchit.vim
+
+set path +=**   " Scans your subdirectories and allows you to jump to files with the find command and go back with b
+		" very cool stuff
 
 set title	" Sets window name to file title
 set nospell	" Disable spellcheck by default
@@ -53,16 +79,11 @@ set ruler	" Gives you line number bottom right
 set ignorecase  " Required for smartcase
 set smartcase   " Matches uppercase letters only if typed (just look it up)
 set hlsearch	" hightlight search, use :noh to disable
-set incsearch
+set incsearch	" Start searching as you type
 
-set encoding=utf-8
-
-set t_Co=256
-colorscheme nord
-
-""""""""""""""""
+"""""""""""""""""""""""
 """ Global Bindings """
-""""""""""""""""
+"""""""""""""""""""""""
 
 let mapleader=" "
 
