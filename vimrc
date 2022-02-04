@@ -24,7 +24,7 @@
 """ Install vim-plug """
 """"""""""""""""""""""""
 
-let data_dir = '~/.config/vim'
+let data_dir = '~/.vim/'
 if empty(glob(data_dir . '/autoload/plug.vim'))
 	silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
@@ -33,7 +33,7 @@ endif
 """""""""""""""""""""""""""""
 """ Plugins with vim-plug """
 """""""""""""""""""""""""""""
-call plug#begin('~/.local/share/vim/plugged')
+call plug#begin('~/.vim/plugged')
 
 Plug 'arcticicestudio/nord-vim'
 
