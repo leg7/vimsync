@@ -21,30 +21,32 @@
 " if !has('nvim') | set viminfofile=$XDG_CACHE_HOME/vim/viminfo | endif
 
 """"""""""""""""""""""""
-""" Install vim-plug """
+""""""" vim-plug """""""
 """"""""""""""""""""""""
 
-let data_dir = '~/.vim/'
+" Automatically install vimplug if not installed
+let data_dir = '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
 	silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-"""""""""""""""""""""""""""""
-""" Plugins with vim-plug """
-"""""""""""""""""""""""""""""
+" Instal my plugins
 call plug#begin('~/.vim/plugged')
 
+" Aesthetics
 Plug 'arcticicestudio/nord-vim'
+Plug 'itchyny/lightline.vim'
+Plug 'junegunn/goyo.vim'
 
+" Utility
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'mattn/emmet-vim'
 
+" Syntax
 Plug 'plasticboy/vim-markdown'
 Plug 'lervag/vimtex'
-
-Plug 'junegunn/goyo.vim'
 
 call plug#end()
 
@@ -62,7 +64,7 @@ colorscheme nord
 runtime! macros/matchit.vim
 
 set path +=**   " Scans your subdirectories and allows you to jump to files with the find command and go back with b
-		" very cool stuff
+		" very cool stuff, you don't need a fuzzy finder plugin it's already built in !!!!
 
 set title	" Sets window name to file title
 set nospell	" Disable spellcheck by default
@@ -80,6 +82,14 @@ set ignorecase  " Required for smartcase
 set smartcase   " Matches uppercase letters only if typed (just look it up)
 set hlsearch	" hightlight search, use :noh to disable
 set incsearch	" Start searching as you type
+
+" Lightline plugin
+set laststatus=2
+let g:lightline = {
+      \ 'colorscheme': 'nord',
+	\ 'separator': { 'left': '', 'right': '' },
+	\ 'subseparator': { 'left': '', 'right': '' }
+      \ }
 
 """""""""""""""""""""""
 """ Global Bindings """
