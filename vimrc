@@ -104,6 +104,9 @@ map <leader>s :setlocal spell! spelllang=fr<CR>
 map <leader>i :setlocal autoindent<CR>
 map <leader>I :setlocal noautoindent<CR>
 
+" Disable highlight search
+map <leader><leader> :noh<CR>
+
 " Toggle goyo (centered text)
 map <leader>g :Goyo<CR>
 
