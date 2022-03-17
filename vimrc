@@ -1,6 +1,6 @@
-"""""""""""""""""""
-""" XDG SUPPORT """
-"""""""""""""""""""
+"==================
+"== XDG SUPPORT ===
+"==================
 " if empty($MYVIMRC) | let $MYVIMRC = expand('<sfile>:p') | endif
 
 " set runtimepath^=$XDG_CONFIG_HOME/vim
@@ -20,9 +20,9 @@
 
 " if !has('nvim') | set viminfofile=$XDG_CACHE_HOME/vim/viminfo | endif
 
-""""""""""""""""""""""""
-""""""" vim-plug """""""
-""""""""""""""""""""""""
+"=======================
+"====== vim-plug =======
+"=======================
 
 " Automatically install vimplug if not installed
 let data_dir = '~/.vim'
@@ -31,7 +31,7 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" Instal my plugins
+" Install my plugins
 call plug#begin('~/.vim/plugged')
 
 " Aesthetics
@@ -43,47 +43,90 @@ Plug 'junegunn/goyo.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'mattn/emmet-vim'
+Plug 'lifepillar/vim-mucomplete'
 
 " Syntax
 Plug 'plasticboy/vim-markdown'
+Plug 'vim-python/python-syntax'
 Plug 'lervag/vimtex'
 
 call plug#end()
 
-"""""""""""""""""""
-""" Preferences """
-"""""""""""""""""""
+"==================
+"=== Settings =====
+"==================
 
-set nocompatible
-filetype plugin on
+set nocompatible 		        " Disable vi compatiblity
 set encoding=utf-8
 
-set t_Co=256
+" Behaviour
+filetype plugin indent on       " Autorecognize filetype
+set confirm			            " Confirm save on close
+set shortmess=a                 " Reduce console output to avoid hitting enter
+set scrolloff=5                 " Always keep 5 lines of padding when scrolling vertically
+set sidescrolloff=5             " Same
+" Indent
+set autoindent  		        " Autoindents code
+set expandtab			        " Convert tab to spaces
+set tabstop=4			        " Decrase default tab width so that code fits better on screen
+set shiftwidth=4		        " Size of tab when using >> and <<
+" Information
+syntax on				        " Turn on syntax highlighting
+let g:python_highlight_all = 1  " Python syntax plugin
+let g:python_slow_syncl = 0     " Improve performance
+set title				        " Sets window name to file title
+set relativenumber 		        " Relative number lines on the left hand side
+set number                      " Prints line number on the left hand side
+set ruler				        " Gives you line number bottom right
+set showcmd                     " Show keys pressed
+" Search
+set ignorecase  		        " Required for smartcase
+set smartcase   		        " Matches uppercase letters only if typed (just look it up)
+set hlsearch			        " hightlight search, use :noh to disable
+set incsearch			        " Start searching as you type
+" Features
+set hidden                      " Allow to leave buffer without saving
+set splitbelow                  " New splits go below
+set splitright
+
+set nospell			            " Disable spellcheck by default
+runtime! macros/matchit.vim	    " Improve % matching
+set clipboard=unnamedplus 	    " Use system clipboard instead of registries
+
+set wildmenu                    " Better command autocompletion menu
+set wildmode=longest:list,full 	" First tab completes to longest string and shows matches, second tab starts cycling through full matches
+set wildignorecase
+
+set foldmethod=indent 		    " folds functions, unfold them with za
+set foldnestmax=1               " Fold at most the top function, don't fold everything inside of it
+set foldlevelstart=20           " Set a very high start fold level so that all the folds are open when you first open the file
+
+set path +=**			        " very cool stuff, you don't need a fuzzy finder plugin it's already built in !!!!
+                                " Scans your subdirectories and allows you to jump to files with the find command
+                                " and go back with b <buffer name> (# for previous)
+
+let g:mucomplete#enable_auto_at_startup = 1 " Autocompletion with mucomplete
+" let g:mucomplete#completion_delay = 1
+set completeopt+=menuone,noinsert,preview
+
+""" Visuals """
+set termguicolors
+" set Vim-specific sequences for RGB colors and enable truecolor support
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+let g:nord_italic = 1
+let g:nord_italic_comments = 1
+let g:nord_underline = 1
+let g:nord_cursor_line_number_background = 1
 colorscheme nord
 
-runtime! macros/matchit.vim
-
-set path +=**   " Scans your subdirectories and allows you to jump to files with the find command and go back with b
-		" very cool stuff, you don't need a fuzzy finder plugin it's already built in !!!!
-
-set title	" Sets window name to file title
-set nospell	" Disable spellcheck by default
-set autoindent
-set confirm	" Confirm save on close
-set clipboard=unnamedplus " Use system clipboard instead of registries
-set wildmode=longest,list,full " better autocompletion
-
+" Changes cursor shape in insert and replace mode
+let &t_SI = "\<Esc>[6 q"
+let &t_SR = "\<Esc>[4 q"
+let &t_EI = "\<Esc>[2 q"
 set cursorline " Highlights the line where your cursor is at
 
-syntax on
-set relativenumber " Relative number lines on the left hand side
-set ruler	" Gives you line number bottom right
-set ignorecase  " Required for smartcase
-set smartcase   " Matches uppercase letters only if typed (just look it up)
-set hlsearch	" hightlight search, use :noh to disable
-set incsearch	" Start searching as you type
-
-" Lightline plugin
+" Lightline plugin get cool triangular font instead of square
 set laststatus=2
 let g:lightline = {
       \ 'colorscheme': 'nord',
@@ -91,9 +134,9 @@ let g:lightline = {
 	\ 'subseparator': { 'left': '', 'right': '' }
       \ }
 
-"""""""""""""""""""""""
-""" Global Bindings """
-"""""""""""""""""""""""
+"======================
+"== Global Bindings ===
+"======================
 
 let mapleader=" "
 
@@ -105,7 +148,7 @@ map <leader>i :setlocal autoindent<CR>
 map <leader>I :setlocal noautoindent<CR>
 
 " Disable highlight search
-map <leader><leader> :noh<CR>
+map <silent> <leader><leader> :noh<CR>
 
 " Toggle goyo (centered text)
 map <leader>g :Goyo<CR>
@@ -116,11 +159,18 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" Some autoexec commands and filetype bindings """
-""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <leader>w :w<CR>
+map <leader>f :filetype detect<CR>
 
-"""" HTML BINDINGS
+map <leader>c :!g++ -Wpedantic % -o %.out; ./%.out<CR>
+
+"===================================================
+"== Some autoexec commands and filetype bindings ===
+"===================================================
+
+command Cwd :execute 'cd %p:h'
+
+"=== HTML BINDINGS
 autocmd FileType html map <leader>p i<p></p><Esc>2ba
 
 autocmd FileType tex,latex,markdown setlocal spelllang=fr " Sets spellchecker to french for latex and markdown files
