@@ -1,38 +1,38 @@
 "==================
 "== XDG SUPPORT ===
 "==================
-" if empty($MYVIMRC) | let $MYVIMRC = expand('<sfile>:p') | endif
+if empty($MYVIMRC) | let $MYVIMRC = expand('<sfile>:p') | endif
 
-" set runtimepath^=$XDG_CONFIG_HOME/vim
-" set runtimepath+=$XDG_DATA_HOME/vim
-" set runtimepath+=$XDG_CONFIG_HOME/vim/after
+set runtimepath^=$XDG_CONFIG_HOME/vim
+set runtimepath+=$XDG_DATA_HOME/vim
+set runtimepath+=$XDG_CONFIG_HOME/vim/after
 
-" set packpath^=$XDG_DATA_HOME/vim,$XDG_CONFIG_HOME/vim
-" set packpath+=$XDG_CONFIG_HOME/vim/after,$XDG_DATA_HOME/vim/after
+set packpath^=$XDG_DATA_HOME/vim,$XDG_CONFIG_HOME/vim
+set packpath+=$XDG_CONFIG_HOME/vim/after,$XDG_DATA_HOME/vim/after
 
-" let g:netrw_home = $XDG_DATA_HOME."/vim"
-" call mkdir($XDG_DATA_HOME."/vim/spell", 'p', 0700)
-" set viewdir=$XDG_DATA_HOME/vim/view | call mkdir(&viewdir, 'p', 0700)
+let g:netrw_home = $XDG_DATA_HOME."/vim"
+call mkdir($XDG_DATA_HOME."/vim/spell", 'p', 0700)
+set viewdir=$XDG_DATA_HOME/vim/view | call mkdir(&viewdir, 'p', 0700)
 
-" set backupdir=$XDG_CACHE_HOME/vim/backup | call mkdir(&backupdir, 'p', 0700)
-" set directory=$XDG_CACHE_HOME/vim/swap   | call mkdir(&directory, 'p', 0700)
-" set undodir=$XDG_CACHE_HOME/vim/undo     | call mkdir(&undodir,   'p', 0700)
+set backupdir=$XDG_CACHE_HOME/vim/backup | call mkdir(&backupdir, 'p', 0700)
+set directory=$XDG_CACHE_HOME/vim/swap   | call mkdir(&directory, 'p', 0700)
+set undodir=$XDG_CACHE_HOME/vim/undo     | call mkdir(&undodir,   'p', 0700)
 
-" if !has('nvim') | set viminfofile=$XDG_CACHE_HOME/vim/viminfo | endif
+if !has('nvim') | set viminfofile=$XDG_CACHE_HOME/vim/viminfo | endif
 
 "=======================
 "====== vim-plug =======
 "=======================
 
 " Automatically install vimplug if not installed
-let data_dir = '~/.vim'
+let data_dir = '$XDG_CONFIG_HOME/vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
 	silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Install my plugins
-call plug#begin('~/.vim/plugged')
+call plug#begin('$XDG_DATA_HOME/vim/plugged')
 
 " Aesthetics
 Plug 'arcticicestudio/nord-vim'
@@ -47,8 +47,8 @@ Plug 'lifepillar/vim-mucomplete'
 
 " Syntax
 Plug 'plasticboy/vim-markdown'
-Plug 'vim-python/python-syntax'
 Plug 'lervag/vimtex'
+Plug 'vim-scripts/dbext.vim'
 
 call plug#end()
 
@@ -72,8 +72,6 @@ set tabstop=4			        " Decrase default tab width so that code fits better on 
 set shiftwidth=4		        " Size of tab when using >> and <<
 " Information
 syntax on				        " Turn on syntax highlighting
-let g:python_highlight_all = 1  " Python syntax plugin
-let g:python_slow_syncl = 0     " Improve performance
 set title				        " Sets window name to file title
 set relativenumber 		        " Relative number lines on the left hand side
 set number                      " Prints line number on the left hand side
@@ -112,8 +110,10 @@ set completeopt+=menuone,noinsert,preview
 """ Visuals """
 set termguicolors
 " set Vim-specific sequences for RGB colors and enable truecolor support
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+" if term = st do
+" let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+" let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+"else
 let g:nord_italic = 1
 let g:nord_italic_comments = 1
 let g:nord_underline = 1
