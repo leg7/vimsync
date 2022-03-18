@@ -1,38 +1,38 @@
 "==================
 "== XDG SUPPORT ===
 "==================
-if empty($MYVIMRC) | let $MYVIMRC = expand('<sfile>:p') | endif
+" if empty($MYVIMRC) | let $MYVIMRC = expand('<sfile>:p') | endif
 
-set runtimepath^=$XDG_CONFIG_HOME/vim
-set runtimepath+=$XDG_DATA_HOME/vim
-set runtimepath+=$XDG_CONFIG_HOME/vim/after
+" set runtimepath^=$XDG_CONFIG_HOME/vim
+" set runtimepath+=$XDG_DATA_HOME/vim
+" set runtimepath+=$XDG_CONFIG_HOME/vim/after
 
-set packpath^=$XDG_DATA_HOME/vim,$XDG_CONFIG_HOME/vim
-set packpath+=$XDG_CONFIG_HOME/vim/after,$XDG_DATA_HOME/vim/after
+" set packpath^=$XDG_DATA_HOME/vim,$XDG_CONFIG_HOME/vim
+" set packpath+=$XDG_CONFIG_HOME/vim/after,$XDG_DATA_HOME/vim/after
 
-let g:netrw_home = $XDG_DATA_HOME."/vim"
-call mkdir($XDG_DATA_HOME."/vim/spell", 'p', 0700)
-set viewdir=$XDG_DATA_HOME/vim/view | call mkdir(&viewdir, 'p', 0700)
+" let g:netrw_home = $XDG_DATA_HOME."/vim"
+" call mkdir($XDG_DATA_HOME."/vim/spell", 'p', 0700)
+" set viewdir=$XDG_DATA_HOME/vim/view | call mkdir(&viewdir, 'p', 0700)
 
-set backupdir=$XDG_CACHE_HOME/vim/backup | call mkdir(&backupdir, 'p', 0700)
-set directory=$XDG_CACHE_HOME/vim/swap   | call mkdir(&directory, 'p', 0700)
-set undodir=$XDG_CACHE_HOME/vim/undo     | call mkdir(&undodir,   'p', 0700)
+" set backupdir=$XDG_CACHE_HOME/vim/backup | call mkdir(&backupdir, 'p', 0700)
+" set directory=$XDG_CACHE_HOME/vim/swap   | call mkdir(&directory, 'p', 0700)
+" set undodir=$XDG_CACHE_HOME/vim/undo     | call mkdir(&undodir,   'p', 0700)
 
-if !has('nvim') | set viminfofile=$XDG_CACHE_HOME/vim/viminfo | endif
+" if !has('nvim') | set viminfofile=$XDG_CACHE_HOME/vim/viminfo | endif
 
 "=======================
 "====== vim-plug =======
 "=======================
 
 " Automatically install vimplug if not installed
-let data_dir = '$XDG_CONFIG_HOME/vim'
+let data_dir = '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
 	silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Install my plugins
-call plug#begin('$XDG_DATA_HOME/vim/plugged')
+call plug#begin('~/.vim/plugged')
 
 " Aesthetics
 Plug 'arcticicestudio/nord-vim'
