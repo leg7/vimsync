@@ -1,17 +1,22 @@
 #!/bin/sh
-# Download my vimrc and place it into ~/.vim
 
-mkdir ~/.vim
-curl https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/vimrc > ~/.vim/vimrc
+# XDG support check
+[ -z $XDG_CONFIG_HOME ] && export $XDG_CONFIG_HOME="$HOME/.config"
+[ -z $XDG_DATA_HOME ] && export $XDG_DATA_HOME="$HOME/.local/share"
+[ -z $XDG_CACHE_HOME ] && export $XDG_CACHE_HOME="$HOME/.local/cache"
+
+# Download my vimrc and place it into ~/.vim
+mkdir -p $XDG_CONFIG_HOME/vim
+curl https://git.leonardgomez.xyz/leg7/dotfiles/raw/branch/master/.config/vim/vimrc > $XDG_CONFIG_HOME/vim/vimrc
 
 # Install nord theme for Konsole
+if [ $TERM = "Konsole" ]
+then
+    curl https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme > ~/.local/share/konsole/nord.colorscheme
+    konsoleprofile colors=nord
+fi
 
-curl https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme > ~/.local/share/konsole/nord.colorscheme
-
-# Change keyboard settings
-
+# Add vi mode to bash and change keyboard settings. Just press k to reset the layout if needed
 setxkbmap -layout us -variant dvp -option caps:swapescape
-#setxkbmap -option caps:swapescape
-
-echo "set -o vi" >> ~/.bashrc
-. ~/.bashrc
+alias k="setxkbmap fr -options caps:swapescape"
+echo "set -o vi" >> $HOME/.bashrc && . $HOME/.bashrc
