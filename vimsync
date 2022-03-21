@@ -1,22 +1,39 @@
 #!/bin/sh
+#################
+### Variables ###
+#################
 
-# XDG support check
-[ -z $XDG_CONFIG_HOME ] && export $XDG_CONFIG_HOME="$HOME/.config"
-[ -z $XDG_DATA_HOME ] && export $XDG_DATA_HOME="$HOME/.local/share"
-[ -z $XDG_CACHE_HOME ] && export $XDG_CACHE_HOME="$HOME/.local/cache"
+# We need these local variables for the script
+XDG_CONFIG_HOME="$HOME/.config"
+XDG_DATA_HOME="$HOME/.local/share"
 
-# Download my vimrc and place it into ~/.vim
+# We export these variables for later shell sessions
+echo 'export XDG_CONFIG_HOME="$HOME/.config"' >> $HOME/.bashrc
+echo 'export XDG_DATA_HOME="$HOME/.local/share"' >> $HOME/.bashrc
+echo 'export XDG_CACHE_HOME="$HOME/.local/cache"' >> $HOME/.bashrc
+echo 'export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"' >> $HOME/.bashrc
+
+##############
+### Import ###
+##############
+
 mkdir -p $XDG_CONFIG_HOME/vim
 curl https://git.leonardgomez.xyz/leg7/dotfiles/raw/branch/master/.config/vim/vimrc > $XDG_CONFIG_HOME/vim/vimrc
 
-# Install nord theme for Konsole
-if [ $TERM = "Konsole" ]
+if [ $TERM = "xterm-256color" ]
 then
-    curl https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme > ~/.local/share/konsole/nord.colorscheme
-    konsoleprofile colors=nord
+    curl https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme > $XDG_DATA_HOME/konsole/nord.colorscheme
+    echo "konsoleprofile colors=nord" >> $HOME/.bashrc
 fi
+
+################
+### Keyboard ###
+################
 
 # Add vi mode to bash and change keyboard settings. Just press k to reset the layout if needed
 setxkbmap -layout us -variant dvp -option caps:swapescape
-alias k="setxkbmap fr -options caps:swapescape"
-echo "set -o vi" >> $HOME/.bashrc && . $HOME/.bashrc
+echo "set -o vi" >> $HOME/.bashrc
+echo 'alias k="setxkbmap fr -option caps:swapescape"' >> $HOME/.bashrc
+
+# We need to do this to source the new bashrc
+killall konsole && konsole &
