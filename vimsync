@@ -33,7 +33,7 @@ fi
 # Add vi mode to bash and change keyboard settings. Just press k to reset the layout if needed
 setxkbmap -layout us -variant dvp -option caps:swapescape
 echo "set -o vi" >> $HOME/.bashrc
-echo 'alias k="setxkbmap fr -option caps:swapescape"' >> $HOME/.bashrc
+echo 'alias 9="setxkbmap fr -option caps:swapescape"' >> $HOME/.bashrc
 
 # We need to do this to source the new bashrc
 killall konsole && konsole &
