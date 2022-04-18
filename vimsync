@@ -8,33 +8,33 @@ XDG_CONFIG_HOME="$HOME/.config"
 XDG_DATA_HOME="$HOME/.local/share"
 
 # We export these variables for later shell sessions
-echo 'export XDG_CONFIG_HOME="$HOME/.config"' >> $HOME/.bashrc
-echo 'export XDG_DATA_HOME="$HOME/.local/share"' >> $HOME/.bashrc
-echo 'export XDG_CACHE_HOME="$HOME/.local/cache"' >> $HOME/.bashrc
-echo 'export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"' >> $HOME/.bashrc
+{ echo 'export XDG_CONFIG_HOME="$HOME/.config"';
+echo 'export XDG_DATA_HOME="$HOME/.local/share"';
+echo 'export XDG_CACHE_HOME="$HOME/.local/cache"';
+echo 'export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"'; } >> "$HOME"/.bashrc
 
 ##############
 ### Import ###
 ##############
 
-mkdir -p $XDG_CONFIG_HOME/vim
-curl https://git.leonardgomez.xyz/leg7/dotfiles/raw/branch/master/.config/vim/vimrc > $XDG_CONFIG_HOME/vim/vimrc
+mkdir -p "$XDG_CONFIG_HOME"/vim
+curl https://git.leonardgomez.xyz/leg7/dotfiles/raw/branch/master/.config/vim/vimrc > "$XDG_CONFIG_HOME"/vim/vimrc
 
-if [ $TERM = "xterm-256color" ]
+if [ "$TERM" = "xterm-256color" ]
 then
-    curl https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme > $XDG_DATA_HOME/konsole/nord.colorscheme
-    echo "konsoleprofile colors=nord" >> $HOME/.bashrc
+    curl https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme > "$XDG_DATA_HOME"/konsole/nord.colorscheme
+    echo "konsoleprofile colors=nord" >> "$HOME"/.bashrc
 fi
 
 ################
 ### Keyboard ###
 ################
 
-# Add vi mode to bash and change keyboard settings. Just press k to reset the layout if needed
+# Add vi mode to bash and change keyboard settings. Just press 1 or 9 to change the layout if needed
 setxkbmap -layout us -variant dvp -option caps:swapescape
-echo "set -o vi" >> $HOME/.bashrc
-echo 'alias 9="setxkbmap fr -option caps:swapescape"' >> $HOME/.bashrc
-echo 'alias 1="setxkbmap -layout us -variant dvp -option caps:swapescape"' >> $HOME/.bashrc
+{ echo "set -o vi";
+echo 'alias 9="setxkbmap fr -option caps:swapescape"';
+echo 'alias 1="setxkbmap -layout us -variant dvp -option caps:swapescape"'; } >> "$HOME"/.bashrc
 
 # We need to do this to source the new bashrc
 killall konsole && konsole &
