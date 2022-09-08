@@ -18,8 +18,7 @@ echo 'export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vi
 ##############
 
 mkdir -p "$XDG_CONFIG_HOME"/vim
-curl https://git.leonardgomez.xyz/leg7/dotfiles/raw/branch/master/.config/vim/vimrc > "$XDG_CONFIG_HOME"/vim/vimrc
-
+curl https://git.leonardgomez.xyz/leg7/dotfiles/raw/branch/master/home/user/.config/vim/vimrc > "$XDG_CONFIG_HOME"/vim/vimrc
 if [ "$TERM" = "xterm-256color" ]
 then
     curl https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme > "$XDG_DATA_HOME"/konsole/nord.colorscheme
