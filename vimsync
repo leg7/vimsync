@@ -24,7 +24,7 @@ cp kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc
 
 if [ "$TERM" = "xterm-256color" ]
 then
-    curl "$KONSOLE_URL" > "$XDG_DATA_HOME"/konsole/nord.colorscheme
+    cp nord.colorscheme "$XDG_DATA_HOME"/konsole/nord.colorscheme
     echo "konsoleprofile colors=nord" >> "$HOME"/.bashrc
 fi
 
