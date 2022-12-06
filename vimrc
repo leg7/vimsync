@@ -361,14 +361,25 @@ vmap <unique> <right> <Plug>SchleppRight
 
 " SQL Stuff
 
+" Automatically create drop statement at the head of the file for current line
+func DropTemplate()
+	if getline(".") =~? "TABLE" || getline(".") =~? "SEQUENCE" || getline(".") =~? "VIEW"
+		exe "normal 0wy2wggODROP \<Esc>pbiIF EXISTS \<Esc>A\<BS>;\<Esc><C-o>"
+	endif
+endfunc
+map <leader>fd :call DropTemplate()<CR>
+
+
 " Macro to generate sql code from a table template like
 " MyTable (Attribute1, Attribute2, Attr3)
 func TableTemplate()
 	" These strings are basically macros
 	let l:TableStruct   = "ICREATE TABLE \<Esc>wvEguf(a\<CR>\<Esc>i\<CR>;\<Esc>h%j"
-	let l:ContentStruct = "OPRIMARY KEY (attribute),\<CR>FOREIGN KEY (attribute) REFERENCES table(attribute),\<Esc>j0"
-	let l:ContentAlign = "0f,a\<CR>\<Esc>"
-	let l:SpaceOutTable    = "/);\<CR>o\<Esc>j"
+	let l:ContentStruct = "OPRIMARY KEY (),\<CR>FOREIGN KEY (attribute) REFERENCES table_name(attribute),\<Esc>j0"
+	let l:ContentAlign = "0f,i TYPE\<Esc>la\<CR>\<Esc>"
+	let l:CallDropTemplate = "?CREATE TABLE \<CR>:call DropTemplate()\<CR>\<C-o>\<C-o>"
+	let l:SetPrimaryKey = "3jwye2kf(p"
+	let l:EndStruct = "2jV/);\<CR>gl /);\<CR>o\<Esc>j"
 
 	exe "normal " .. TableStruct
 
@@ -376,19 +387,20 @@ func TableTemplate()
 	while getline('.') =~? ','
 		exe "normal " .. ContentAlign
 	endwhile
+	exe "normal a TYPE\<Esc>"
 
-	exe "normal " .. SpaceOutTable
+	exe "normal " CallDropTemplate .. SetPrimaryKey .. EndStruct
 endfunc
 map <leader>ft :call TableTemplate()<CR>
 
 " Take table data and format it for an sql insert
 " This quotes integers and dates too because vimscript sucks
 func InsertTemplate()
-	let l:Clean = "}o\<Esc>{j"
-	let l:InsertStruct = "OINSERT INTO table(attr1,attr2,...) VALUES\<Esc>j"
+	let l:Clean = "O\<Esc>j}o\<Esc>{j"
+	let l:InsertStruct = "OINSERT INTO table_name(attr1,attr2,...)\<CR>VALUES \<Esc>j"
 	let l:LineStruct = "A)\<Esc>I(\<Esc>w"
 	let l:ContentStruct = "vt S'f r,w"
-	let l:EndStruct = "k$r;"
+	let l:EndStruct = "k$r;{3jI\<BS>\<Esc>V}gl(}"
 
 	exe "normal " .. Clean .. InsertStruct
 
@@ -409,14 +421,6 @@ func FixInsertValue()
 	exe "normal " .. Fix
 endfunc
 map <leader>ff :call FixInsertValue()<CR>
-
-" Automatically create drop statement at the head of the file for current line
-func DropTemplate()
-	if getline(".") =~? "TABLE" || getline(".") =~? "SEQUENCE"
-		exe "normal 0wy2wggODROP \<Esc>pbiIF EXISTS \<Esc>A\<BS>;\<Esc><C-o>"
-	endif
-endfunc
-map <leader>fd :call DropTemplate()<CR>
 
 " --
 " TOGGLES
