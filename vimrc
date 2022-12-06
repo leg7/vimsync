@@ -359,6 +359,65 @@ vmap <unique> <down>  <Plug>SchleppDown
 vmap <unique> <left>  <Plug>SchleppLeft
 vmap <unique> <right> <Plug>SchleppRight
 
+" SQL Stuff
+
+" Macro to generate sql code from a table template like
+" MyTable (Attribute1, Attribute2, Attr3)
+func TableTemplate()
+	" These strings are basically macros
+	let l:TableStruct   = "ICREATE TABLE \<Esc>wvEguf(a\<CR>\<Esc>i\<CR>;\<Esc>h%j"
+	let l:ContentStruct = "OPRIMARY KEY (attribute),\<CR>FOREIGN KEY (attribute) REFERENCES table(attribute),\<Esc>j0"
+	let l:ContentAlign = "0f,a\<CR>\<Esc>"
+	let l:SpaceOutTable    = "/);\<CR>o\<Esc>j"
+
+	exe "normal " .. TableStruct
+
+	exe "normal " .. ContentStruct
+	while getline('.') =~? ','
+		exe "normal " .. ContentAlign
+	endwhile
+
+	exe "normal " .. SpaceOutTable
+endfunc
+map <leader>ft :call TableTemplate()<CR>
+
+" Take table data and format it for an sql insert
+" This quotes integers and dates too because vimscript sucks
+func InsertTemplate()
+	let l:Clean = "}o\<Esc>{j"
+	let l:InsertStruct = "OINSERT INTO table(attr1,attr2,...) VALUES\<Esc>j"
+	let l:LineStruct = "A)\<Esc>I(\<Esc>w"
+	let l:ContentStruct = "vt S'f r,w"
+	let l:EndStruct = "k$r;"
+
+	exe "normal " .. Clean .. InsertStruct
+
+	while getline(".") !~ '^$'
+		exe "normal " .. LineStruct
+		while getline(".") =~? " "
+			exe "normal " .. ContentStruct
+		endwhile
+		exe "normal vEhS'A,\<Esc>j"
+	endwhile
+	exe "normal " .. EndStruct
+endfunc
+map <leader>fi :call InsertTemplate()<CR>
+
+" Fix formatting of data that had spaces in it
+func FixInsertValue()
+	let l:Fix = "f'vf'c \<Esc>F'j"
+	exe "normal " .. Fix
+endfunc
+map <leader>ff :call FixInsertValue()<CR>
+
+" Automatically create drop statement at the head of the file for current line
+func DropTemplate()
+	if getline(".") =~? "TABLE" || getline(".") =~? "SEQUENCE"
+		exe "normal 0wy2wggODROP \<Esc>pbiIF EXISTS \<Esc>A\<BS>;\<Esc><C-o>"
+	endif
+endfunc
+map <leader>fd :call DropTemplate()<CR>
+
 " --
 " TOGGLES
 " --
@@ -401,9 +460,13 @@ if has('autocmd')
 
 	autocmd FileType python,sh set foldmethod=indent
 
+
 	autocmd BufNewFile,BufRead * if empty(&filetype) | setlocal fp="fmt -w80" | endif
 
+	autocmd BufWritePre *.sql silent %s/\<\w\+\>/\=synIDattr(synID(line('.'),col('.'),1), 'name')=~?'sql\%(keyword\|operator\|statement\|type\)'?toupper(submatch(0)):submatch(0)/g |''
+
 	autocmd BufWritePre * %s/\s\+$//e " Remove trailing spaces
+
 else
 	echom "This build does not support autocmds"
 
