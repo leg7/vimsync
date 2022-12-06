@@ -322,6 +322,14 @@ map <leader>h :sp **/*
 map <leader>e :e **/*
 
 " --
+"  Convert camel_case to snake_case
+"  --
+function CamelCaseToSnakeCase()
+	exe "normal :s#\\(\\<\\u\\l\\+\\|\\l\\+\\)\\(\\u\\)#\\l\\1_\\l\\2#g\<CR>"
+endfunc
+map <leader>sc :call CamelCaseToSnakeCase()<CR>
+
+" --
 " Buffer controls with the lightline bufferline plugin
 " --
 map <leader>cc :bd<CR>
@@ -363,8 +371,10 @@ vmap <unique> <right> <Plug>SchleppRight
 
 " Automatically create drop statement at the head of the file for current line
 func DropTemplate()
-	if getline(".") =~? "TABLE" || getline(".") =~? "SEQUENCE" || getline(".") =~? "VIEW"
-		exe "normal 0wy2wggODROP \<Esc>pbiIF EXISTS \<Esc>A\<BS>;\<Esc><C-o>"
+	if getline(".") =~? "TABLE" || getline(".") =~? "VIEW"
+		exe "normal 0wy2eggODROP \<Esc>pbiIF EXISTS \<Esc>A;\<Esc><C-o>"
+	elseif getline(".") =~? "SEQUENCE"
+		exe "normal 0wy2egg}ODROP \<Esc>pbiIF EXISTS \<Esc>A;\<Esc><C-o>"
 	endif
 endfunc
 map <leader>fd :call DropTemplate()<CR>
@@ -467,7 +477,7 @@ if has('autocmd')
 
 	autocmd BufNewFile,BufRead * if empty(&filetype) | setlocal fp="fmt -w80" | endif
 
-	autocmd BufWritePre *.sql silent %s/\<\w\+\>/\=synIDattr(synID(line('.'),col('.'),1), 'name')=~?'sql\%(keyword\|operator\|statement\|type\)'?toupper(submatch(0)):submatch(0)/g |''
+	autocmd BufWritePre *.sql silent %s/\<\w\+\>/\=synIDattr(synID(line('.'),col('.'),1), 'name')=~?'sql\%(keyword\|operator\|statement\|type\|function\)'?toupper(submatch(0)):submatch(0)/g |''
 
 	autocmd BufWritePre * %s/\s\+$//e " Remove trailing spaces
 
