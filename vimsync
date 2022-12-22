@@ -3,34 +3,62 @@
 ### Variables ###
 #################
 
-# We need these local variables for the script
 XDG_CONFIG_HOME="$HOME/.config"
 XDG_DATA_HOME="$HOME/.local/share"
 
-# We export these variables for later shell sessions
-{ echo 'export XDG_CONFIG_HOME="$HOME/.config"';
-echo 'export XDG_DATA_HOME="$HOME/.local/share"';
-echo 'export XDG_CACHE_HOME="$HOME/.local/cache"';
-echo 'export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"'; } >> "$HOME"/.bashrc
+# I need to implement an argument for the remote option to specify
+# the git remote to be used (use getopts)
+
+vimrc_url="https://git.leonardgomez.xyz/leg7/dotfiles/raw/branch/x200/home/user/.config/vim/vimrc"
+kwinrc_url="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/kwinrc"
+kshortcuts_url="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/kglobalshortcutsrc"
+konsole_url="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme"
 
 ##############
 ### Import ###
 ##############
 
 mkdir -p "$XDG_CONFIG_HOME"/vim
-cp ./vimrc          "$XDG_CONFIG_HOME"/vim/vimrc
-cp kwirc            "$XDG_CONFIG_HOME"/kwinrc
-cp kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc
 
-if [ "$TERM" = "xterm-256color" ]
-then
-    cp nord.colorscheme "$XDG_DATA_HOME"/konsole/nord.colorscheme
-    echo "konsoleprofile colors=nord" >> "$HOME"/.bashrc
-fi
+case $1 in
+	(local|l)
+		cp ./vimrc          "$XDG_CONFIG_HOME"/vim/vimrc &&
+		cp kwirc            "$XDG_CONFIG_HOME"/kwinrc &&
+		cp kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
+		cp nord.colorscheme "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
+		echo "Error copying config files, aborting" && exit 1
+		# Need to implement a clean function to delete files if process
+		# aborted
+		;;
+	(remote|r)
+		curl "$vimrc_url"      > "$XDG_CONFIG_HOME"/vim/vimrc &&
+		curl "$kwinrc_url"     > "$XDG_CONFIG_HOME"/kwinrc &&
+		curl "$kshortcuts_url" > "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
+		curl "$konsole_url"    > "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
+		echo "Error fetching config files, aborting" && exit 1
+		;;
+	(*)
+		echo "USAGE:"
+		printf "\t./vimsync OPTION\n"
+		echo "OPTIONS:"
+		printf "\tlocal,  l: sync with local files (you need to have cloned the repo for this to work)\n"
+		printf "\tremote, r: sync the configuration remotely (you only need the script for this to work)\n"
+		exit 1
+		;;
+esac
 
-################
-### Keyboard ###
-################
+###############
+## Configure ##
+###############
+
+# I should make the bashrc source a shell script with my config instead
+
+# We export these variables for later shell sessions
+{ echo 'export XDG_CONFIG_HOME="$HOME/.config"';
+echo 'export XDG_DATA_HOME="$HOME/.local/share"';
+echo 'export XDG_CACHE_HOME="$HOME/.local/cache"';
+echo 'export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"';
+echo 'konsoleprofile colors=nord' ; } >> "$HOME"/.bashrc
 
 # Add vi mode to bash and change keyboard settings. Just press 1 or 9 to change the layout if needed
 setxkbmap -layout us -variant dvp -option caps:swapescape
