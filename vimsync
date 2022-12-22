@@ -1,4 +1,5 @@
 #!/bin/sh
+
 #################
 ### Variables ###
 #################
@@ -22,13 +23,11 @@ mkdir -p "$XDG_CONFIG_HOME"/vim
 
 case $1 in
 	(local|l)
-		cp ./vimrc          "$XDG_CONFIG_HOME"/vim/vimrc &&
-		cp kwirc            "$XDG_CONFIG_HOME"/kwinrc &&
-		cp kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
-		cp nord.colorscheme "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
+		cp -i ./vimrc          "$XDG_CONFIG_HOME"/vim/vimrc &&
+		cp -i kwirc            "$XDG_CONFIG_HOME"/kwinrc &&
+		cp -i kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
+		cp -i nord.colorscheme "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
 		echo "Error copying config files, aborting" && exit 1
-		# Need to implement a clean function to delete files if process
-		# aborted
 		;;
 	(remote|r)
 		curl "$vimrc_url"      > "$XDG_CONFIG_HOME"/vim/vimrc &&
