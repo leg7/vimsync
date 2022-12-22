@@ -17,10 +17,10 @@ echo 'export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vi
 ### Import ###
 ##############
 
-KONSOLE_URL="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/testing/nord.colorscheme"
+KONSOLE_URL="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme"
 VIMRC_URL="https://git.leonardgomez.xyz/leg7/dotfiles/raw/branch/x200/home/user/.config/vim/vimrc"
-KWINRC_URL="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/testing/kwinrc"
-KSHORTCUTS_URL="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/testing/kglobalshortcutsrc"
+KWINRC_URL="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/kwinrc"
+KSHORTCUTS_URL="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/kglobalshortcutsrc"
 
 mkdir -p "$XDG_CONFIG_HOME"/vim
 curl "$VIMRC_URL"      > "$XDG_CONFIG_HOME"/vim/vimrc
