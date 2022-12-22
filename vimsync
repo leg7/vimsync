@@ -28,14 +28,21 @@ case $1 in
 		cp -i kwirc            "$XDG_CONFIG_HOME"/kwinrc &&
 		cp -i kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
 		cp -i nord.colorscheme "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
-		echo "Error copying config files, aborting" && exit 1
+		{
+			echo "Error copying config files, aborting"
+			exit 1
+		}
 		;;
 	(remote|r)
 		for url in $urls
 		do
 			wget -q "$url" ||
-			echo "Error fetching config files, aborting" && exit 1
+			{
+				echo "Error fetching config files, aborting"
+				exit 1
+			}
 		done
+
 		mv -i ./vimrc          "$XDG_CONFIG_HOME"/vim/vimrc &&
 		mv -i kwirc            "$XDG_CONFIG_HOME"/kwinrc &&
 		mv -i kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
