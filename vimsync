@@ -16,6 +16,12 @@ kshortcuts_url="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/kglo
 konsole_url="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme"
 urls="$vimrc_url $kwinrc_url $kshortcuts_url $konsole_url"
 
+help_msg="USAGE:
+\t./vimsync OPTION
+OPTIONS:
+\tlocal,  l: sync with local files (you need to have cloned the repo for this to work)
+\tremote, r: sync the configuration remotely (you only need the script for this to work)"
+
 ##############
 ### Import ###
 ##############
@@ -54,11 +60,7 @@ case $1 in
 		}
 		;;
 	(*)
-		echo "USAGE:"
-		printf "\t./vimsync OPTION\n"
-		echo "OPTIONS:"
-		printf "\tlocal,  l: sync with local files (you need to have cloned the repo for this to work)\n"
-		printf "\tremote, r: sync the configuration remotely (you only need the script for this to work)\n"
+		echo "$help_msg"
 		exit 1
 		;;
 esac
