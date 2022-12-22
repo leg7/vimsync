@@ -61,14 +61,14 @@ syntax_error ()
 mkdir -p "$XDG_CONFIG_HOME"/vim
 
 case $1 in
-	(local|l)
+	(local | l)
 		cp -i ./vimrc          "$XDG_CONFIG_HOME"/vim/vimrc &&
 		cp -i kwirc            "$XDG_CONFIG_HOME"/kwinrc &&
 		cp -i kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
 		cp -i nord.colorscheme "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
 		cp_error
 		;;
-	(remote|r)
+	(remote | r)
 		for url in $urls
 		do
 			wget -q "$url" || wget_error
