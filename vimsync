@@ -14,6 +14,7 @@ vimrc_url="https://git.leonardgomez.xyz/leg7/dotfiles/raw/branch/x200/home/user/
 kwinrc_url="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/kwinrc"
 kshortcuts_url="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/kglobalshortcutsrc"
 konsole_url="https://git.leonardgomez.xyz/leg7/vimsync/raw/branch/master/nord.colorscheme"
+urls="$vimrc_url $kwinrc_url $kshortcuts_url $konsole_url"
 
 ##############
 ### Import ###
@@ -30,11 +31,20 @@ case $1 in
 		echo "Error copying config files, aborting" && exit 1
 		;;
 	(remote|r)
-		curl "$vimrc_url"      > "$XDG_CONFIG_HOME"/vim/vimrc &&
-		curl "$kwinrc_url"     > "$XDG_CONFIG_HOME"/kwinrc &&
-		curl "$kshortcuts_url" > "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
-		curl "$konsole_url"    > "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
-		echo "Error fetching config files, aborting" && exit 1
+		for url in $urls
+		do
+			wget -q "$url" ||
+			echo "Error fetching config files, aborting" && exit 1
+		done
+		mv -i ./vimrc          "$XDG_CONFIG_HOME"/vim/vimrc &&
+		mv -i kwirc            "$XDG_CONFIG_HOME"/kwinrc &&
+		mv -i kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
+		mv -i nord.colorscheme "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
+		{
+			echo "Error moving config files, aborting"
+			echo "Files that couldn't be moved will be left in this directory"
+			exit 1
+		}
 		;;
 	(*)
 		echo "USAGE:"
