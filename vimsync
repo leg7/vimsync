@@ -47,7 +47,7 @@ mkdir_error()
 local_sync()
 {
 	cp -i ./vimrc          "$XDG_CONFIG_HOME"/vim/vimrc &&
-	cp -i kwirc            "$XDG_CONFIG_HOME"/kwinrc &&
+	cp -i kwinrc           "$XDG_CONFIG_HOME"/kwinrc &&
 	cp -i kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
 	cp -i nord.colorscheme "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
 	cp_error
@@ -60,7 +60,7 @@ remote_sync()
 	done
 
 	mv -i ./vimrc          "$XDG_CONFIG_HOME"/vim/vimrc &&
-	mv -i kwirc            "$XDG_CONFIG_HOME"/kwinrc &&
+	mv -i kwinrc           "$XDG_CONFIG_HOME"/kwinrc &&
 	mv -i kglobalshortcuts "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
 	mv -i nord.colorscheme "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
 	mv_error
