@@ -116,18 +116,17 @@ if has('syntax')
 	set cursorline
 endif
 
-" Changes cursor shape in different modes
 " set Vim-specific sequences for RGB colors and enable truecolor support
 if $COLORTERM ==# "truecolor" && has('termguicolors')
 	set termguicolors
 	let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-	if !($TERM ==# "xterm-256color")
-		let &t_SI = "\<Esc>[6 q"
-		let &t_SR = "\<Esc>[4 q"
-		let &t_EI = "\<Esc>[2 q"
-	endif
 endif
+
+" Changes cursor shape in different modes
+let &t_SI = "\<Esc>[6 q"
+let &t_SR = "\<Esc>[4 q"
+let &t_EI = "\<Esc>[2 q"
 
 " Tab complete for fuzzy finding
 if has('wildmenu')
@@ -293,8 +292,7 @@ map <C-l> <C-w>l
 map <leader>q :close<CR>
 
 " Easier saving
-map <leader>wa :wa<CR>
-map <leader>ww :wa<CR>
+map <leader>w :wa<CR>
 
 map <leader>f :filetype detect<CR>
 
