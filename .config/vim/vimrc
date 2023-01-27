@@ -276,7 +276,7 @@ let g:dirvish_relative_paths = 0
 call dirvish#add_icon_fn({p -> p[-1:]=='/'?'📂':'📄'})
 
 " Color highligting
-let g:Hexokinase_highlighters = [ 'foregroundfull' ]
+let g:Hexokinase_highlighters = [ 'background' ]
 
 "=======================
 "=== Global Bindings ===
