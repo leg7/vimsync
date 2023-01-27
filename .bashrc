@@ -93,7 +93,7 @@ export PAGER="less"
 export BROWSER="firefox"
 
 # Color theme
-konsoleprofile colors=Dracula
+konsoleprofile colors=dracula
 eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors/dracula)"
 
 export XDG_CONFIG_HOME="$HOME/.config"
