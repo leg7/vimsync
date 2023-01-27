@@ -86,8 +86,15 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# Vimsync
+#--- Vimsync ---#
 
+# Cleanup
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.local/cache"
+export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
+
+# Defaults
 export EDITOR="vim"
 export PAGER="less"
 export BROWSER="firefox"
@@ -95,11 +102,6 @@ export BROWSER="firefox"
 # Color theme
 konsoleprofile colors=dracula
 eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors/dracula)"
-
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_CACHE_HOME="$HOME/.local/cache"
-export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
 
 # Keyboard
 set -o vi
