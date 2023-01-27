@@ -22,16 +22,6 @@ mv_error()
 	exit 1
 }
 
-print_help()
-{
-	printf "USAGE:
-	\t./vimsync OPTION
-	OPTIONS:
-	\t-h       : show this help message
-	\t-l       : sync with local files (you need to have cloned the repo for this to work)
-	\t-r REMOTE: sync remotely from remote, possible values for REMOTE are 'github' or 'gitea'\n"
-}
-
 syntax_error()
 {
 	print_help
@@ -44,12 +34,22 @@ mkdir_error()
   exit 1
 }
 
+print_help()
+{
+	printf "USAGE:
+	\t./vimsync OPTION
+	OPTIONS:
+	\t-h       : show this help message
+	\t-l       : sync with local files (you need to have cloned the repo for this to work)
+	\t-r REMOTE: sync remotely from remote, possible values for REMOTE are 'github' or 'gitea'\n"
+}
+
 local_sync()
 {
-	cp -i ./vimrc            "$XDG_CONFIG_HOME"/vim/vimrc &&
-	cp -i kwinrc             "$XDG_CONFIG_HOME"/kwinrc &&
-	cp -i kglobalshortcutsrc "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
-	cp -i nord.colorscheme   "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
+	cp -i vimrc               "$XDG_CONFIG_HOME"/vim/vimrc &&
+	cp -i kwinrc              "$XDG_CONFIG_HOME"/kwinrc &&
+	cp -i kglobalshortcutsrc  "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
+	cp -i dracula.colorscheme "$XDG_DATA_HOME"/konsole/dracula.colorscheme ||
 	cp_error
 }
 
@@ -59,10 +59,10 @@ remote_sync()
 		wget -q "$url" || wget_error
 	done
 
-	mv -i ./vimrc            "$XDG_CONFIG_HOME"/vim/vimrc &&
-	mv -i kwinrc             "$XDG_CONFIG_HOME"/kwinrc &&
-	mv -i kglobalshortcutsrc "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
-	mv -i nord.colorscheme   "$XDG_DATA_HOME"/konsole/nord.colorscheme ||
+	mv -i ./vimrc             "$XDG_CONFIG_HOME"/vim/vimrc &&
+	mv -i kwinrc              "$XDG_CONFIG_HOME"/kwinrc &&
+	mv -i kglobalshortcutsrc  "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
+	mv -i dracula.colorscheme "$XDG_DATA_HOME"/konsole/dracula.colorscheme ||
 	mv_error
 }
 
@@ -83,33 +83,34 @@ while getopts lr:h option; do
 				vimrc_url="$base/leg7/vimsync/master/vimrc"
 				kwinrc_url="$base/leg7/vimsync/master/kwinrc"
 				kshortcuts_url="$base/leg7/vimsync/master/kglobalshortcutsrc"
-				konsole_url="$base/leg7/vimsync/master/nord.colorscheme"
+				konsole_url="$base/leg7/vimsync/master/dracula.colorscheme"
 			elif [ "$remote" = "gitea" ]
 			then
 				base="https://git.leonardgomez.xyz"
 				vimrc_url="$base/leg7/vimsinc/raw/branch/master/vimrc"
 				kwinrc_url="$base/leg7/vimsync/raw/branch/master/kwinrc"
 				kshortcuts_url="$base/leg7/vimsync/raw/branch/master/kglobalshortcutsrc"
-				konsole_url="$base/leg7/vimsync/raw/branch/master/nord.colorscheme"
+				konsole_url="$base/leg7/vimsync/raw/branch/master/dracula.colorscheme"
 			else
 				syntax_error
 			fi
+
 			url_list="$vimrc_url $kwinrc_url $kshortcuts_url $konsole_url";;
 		(h | *)
 			syntax_error;;
 	esac
 done
 
-mkdir -p "$XDG_CONFIG_HOME"/vim || mkdir_error
 
 if $local_mode && $remote_mode; then
 	syntax_error
-elif $local_mode; then
+fi
+
+mkdir -p "$XDG_CONFIG_HOME"/vim || mkdir_error
+if $local_mode; then
 	local_sync
 elif $remote_mode; then
 	remote_sync
-else
-	syntax_error
 fi
 
 #################
@@ -123,7 +124,7 @@ fi
 echo 'export XDG_DATA_HOME="$HOME/.local/share"';
 echo 'export XDG_CACHE_HOME="$HOME/.local/cache"';
 echo 'export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"';
-echo 'konsoleprofile colors=nord' ; } >> "$HOME"/.bashrc
+echo 'konsoleprofile colors=Dracula' ; } >> "$HOME"/.bashrc
 
 # Add vi mode to bash and change keyboard settings. Just press 1 or 9 to change the layout if needed
 setxkbmap -layout us -variant dvp -option caps:swapescape
