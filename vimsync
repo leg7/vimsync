@@ -109,12 +109,13 @@ while getopts lr:h option; do
 	esac
 done
 
-
 if $local_mode && $remote_mode; then
 	syntax_error
 fi
 
 mkdir -p "$XDG_CONFIG_HOME"/vim || mkdir_error
+mkdir -p "$XDG_CONFIG_HOME"/dircolors || mkdir_error
+
 if $local_mode; then
 	local_sync
 elif $remote_mode; then
