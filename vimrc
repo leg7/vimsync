@@ -40,8 +40,9 @@ call plug#begin('$XDG_DATA_HOME/vim/plugged')
 let g:polyglot_disabled = ['autoindent']
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-scripts/dbext.vim'
+Plug 'elkowar/yuck.vim'
 
-Plug 'arcticicestudio/nord-vim'
+Plug 'dracula/vim',{ 'as' : 'dracula' }
 Plug 'itchyny/vim-cursorword'
 Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'junegunn/goyo.vim'
@@ -63,11 +64,10 @@ Plug 'tommcdo/vim-exchange'
 Plug 'mbbill/undotree'
 Plug 'zirrostig/vim-schlepp'
 Plug 'tomtom/tcomment_vim'
-Plug 'mattn/emmet-vim', { 'for': 'html' }
+Plug 'mattn/emmet-vim', { 'for': [ 'html', 'css', 'php', 'javascript' ] }
 Plug 'preservim/vim-pencil'
 
 Plug 'lifepillar/vim-mucomplete'
-Plug 'Thyrum/vim-stabs'
 
 call plug#end()
 
@@ -87,6 +87,8 @@ set ttyfast lazyredraw
 set updatetime=750
 
 set clipboard=unnamedplus
+nnoremap <C-p> :r!wl-paste<CR>
+xnoremap <silent> <C-y> :w !wl-copy<CR><CR>
 
 set hidden
 
@@ -116,15 +118,15 @@ endif
 
 " Changes cursor shape in different modes
 " set Vim-specific sequences for RGB colors and enable truecolor support
-if $TERM ==# "st-256color" && has('termguicolors')
-	let &t_SI = "\<Esc>[6 q"
-	let &t_SR = "\<Esc>[4 q"
-	let &t_EI = "\<Esc>[2 q"
+if $COLORTERM ==# "truecolor" && has('termguicolors')
+	set termguicolors
 	let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-	set termguicolors
-elseif $TERM !=# "st-256color" && has('termguicolors')
-	set termguicolors
+	if !($TERM ==# "xterm-256color")
+		let &t_SI = "\<Esc>[6 q"
+		let &t_SR = "\<Esc>[4 q"
+		let &t_EI = "\<Esc>[2 q"
+	endif
 endif
 
 " Tab complete for fuzzy finding
@@ -193,34 +195,9 @@ else
 	set autoindent
 endif
 
-" I use the smarttabs plugin so TABS are used to indent at the start of
-" lines and spaces are used to align stuff like comments you get the
-" best of both worlds ; user customizable indentation and consistent alignment
-set tabstop=8
-set shiftwidth=0
-set noexpandtab
-
-" This function converts the file that I'm editing to my prefferd tabs and
-" spaces 'format'.
-" To use this function place your cursor on a line with 1 level of indentation!
-" because the function needs to know how many spaces = 1 level of indentation
-" to be able to convert them back to tabs
-function FixTabsAndSpaces()
-	" We convert all the tabs to spaces
-	set expandtab
-	retab
-
-	" We figure out the size of 1 level of indentation
-	let faketabsize = indent(line("."))
-	let l:tmp = &l:tabstop
-	let &l:tabstop = faketabsize
-
-	" Convert the spaces back into tabs only at the start of lines
-	set noexpandtab
-	RetabIndent
-
-	let &l:tabstop = tmp
-endfunction
+"set tabstop=8
+"set shiftwidth=0
+"set noexpandtab
 
 "-----------------------
 "=== Plugin settings ===
@@ -238,24 +215,43 @@ set infercase
 " And show open buffers on top, you can swap between buffers with <leader>n
 " <leader>p and other keys. look at the mappings!
 set laststatus=2
-let g:lightline = {
- 	\ 'colorscheme':  'nord',
- 	\ 'separator':    { 'left': '', 'right': '' },
- 	\ 'subseparator': { 'left': '', 'right': '' },
-      	\ 'active': {
-      	\   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ] ]
-      	\ },
-      	\ 'tabline': {
-      	\   'left': [ ['buffers'] ],
-      	\   'right': [ ['close'] ]
-      	\ },
-      	\ 'component_expand': {
-      	\   'buffers': 'lightline#bufferline#buffers'
-      	\ },
-      	\ 'component_type': {
-      	\   'buffers': 'tabsel'
-      	\ }
-      	\ }
+if !($TERM ==# "xterm-256color")
+	let g:lightline = {
+		\ 'colorscheme':  'dracula',
+		\ 'separator':    { 'left': '', 'right': '' },
+		\ 'subseparator': { 'left': '', 'right': '' },
+		\ 'active': {
+		\   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ] ]
+		\ },
+		\ 'tabline': {
+		\   'left': [ ['buffers'] ],
+		\   'right': [ ['close'] ]
+		\ },
+		\ 'component_expand': {
+		\   'buffers': 'lightline#bufferline#buffers'
+		\ },
+		\ 'component_type': {
+		\   'buffers': 'tabsel'
+		\ }
+		\ }
+else
+	let g:lightline = {
+		\ 'colorscheme':  'dracula',
+		\ 'active': {
+		\   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ] ]
+		\ },
+		\ 'tabline': {
+		\   'left': [ ['buffers'] ],
+		\   'right': [ ['close'] ]
+		\ },
+		\ 'component_expand': {
+		\   'buffers': 'lightline#bufferline#buffers'
+		\ },
+		\ 'component_type': {
+		\   'buffers': 'tabsel'
+		\ }
+		\ }
+endif
 
 set showtabline=2
 let g:lightline#bufferline#show_number = 2
@@ -267,22 +263,9 @@ let g:lightline#bufferline#composed_number_map = {
 \ 11: '#11', 12: '#12', 13: '#13', 14: '#14', 15: '#15',
 \ 16: '#16', 17: '#17', 18: '#18', 19: '#19', 20: '#20'}
 
-" Nord theme
-let g:nord_italic = 1
-let g:nord_italic_comments = 1
-let g:nord_underline = 1
-let g:nord_cursor_line_number_background = 1
-
-" Make highligted searches red and highlight column 81 in gray
-augroup nord-theme-overrides
-	autocmd!
-	autocmd ColorScheme nord highlight Search term=reverse guifg=fg guibg=#BF616A
-	autocmd ColorScheme nord highlight IncSearch term=reverse gui=underline guifg=fg guibg=#BF616A
-	autocmd ColorScheme nord highlight ColorColumn guibg=#4C566A
-augroup END
+" highlight column 81 in gray
 call matchadd('ColorColumn', '\%81v',100)
-
-colorscheme nord
+colorscheme dracula
 
 " Dirvish file viewer
 let g:dirvish_mode = 1
@@ -310,7 +293,8 @@ map <C-l> <C-w>l
 map <leader>q :close<CR>
 
 " Easier saving
-map <leader>w :w<CR>
+map <leader>wa :wa<CR>
+map <leader>ww :wa<CR>
 
 map <leader>f :filetype detect<CR>
 
@@ -324,10 +308,11 @@ map <leader>e :e **/*
 " --
 "  Convert camel_case to snake_case
 "  --
-function CamelCaseToSnakeCase()
-	exe "normal :s#\\(\\<\\u\\l\\+\\|\\l\\+\\)\\(\\u\\)#\\l\\1_\\l\\2#g\<CR>"
-endfunc
-map <leader>sc :call CamelCaseToSnakeCase()<CR>
+command -range SnakeCase <line1>,<line2>s#\(\<\u\l\+\|\l\+\)\(\u\)#\l\1_\l\2#g
+map <leader>sk :SnakeCase<CR>:noh<CR>
+
+command -range CamelCase <line1>,<line2>s/\(_\)\(.\)/\u\2/g
+map <leader>ck :CamelCase<CR>:noh<CR>
 
 " --
 " Buffer controls with the lightline bufferline plugin
