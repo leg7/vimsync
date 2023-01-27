@@ -1,11 +1,5 @@
 #!/bin/sh
 
-cp_error()
-{
-	echo "Error copying config files, aborting"
-	exit 1
-}
-
 syntax_error()
 {
 	print_help
@@ -23,20 +17,30 @@ print_help()
 
 local_sync()
 {
-	cp -ir .bashrc .config .local "$HOME" ||
-	cp_error
+	if $force; then
+		cp -fr .bashrc .config .local "$HOME"
+	else
+		cp -ir .bashrc .config .local "$HOME"
+	fi
 }
 
 local_mode=false
+force=false
 
-while getopts lh option; do
+while getopts lfh option; do
 	case $option in
 		(l)
 			local_mode=true;;
+		(f)
+			force=true;;
 		(h | *)
 			syntax_error;;
 	esac
 done
+
+if $force && ! $local_mode; then
+	syntax_error
+fi
 
 if $local_mode; then
 	local_sync
