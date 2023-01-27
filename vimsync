@@ -1,6 +1,6 @@
 #!/bin/sh
 
-bad_opition()
+bad_option()
 {
 	usage
 	exit 1
