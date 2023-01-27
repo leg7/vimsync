@@ -99,10 +99,6 @@ export EDITOR="vim"
 export PAGER="less"
 export BROWSER="firefox"
 
-# Color theme
-konsoleprofile colors=dracula
-eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors/dracula)"
-
 # Keyboard
 set -o vi
 alias 9="setxkbmap fr -option caps:swapescape"
@@ -114,6 +110,8 @@ alias share="cd $XDG_DATA_HOME"
 alias cache="cd $XDG_CACHE_HOME"
 alias bin='cd ~/.local/bin'
 
+# Colors
+eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors/dracula)"
 alias ls='ls --color=auto --group-directories-first'
 alias grep='grep --color'
 alias diff='diff --color=auto'
