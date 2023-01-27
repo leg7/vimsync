@@ -16,15 +16,6 @@ usage()
 	\t-f 			 : force the copy\n"
 }
 
-local_sync()
-{
-	if $force; then
-		cp -fr .bashrc .config .local "$HOME"
-	else
-		cp -ir .bashrc .config .local "$HOME"
-	fi
-}
-
 local_mode=false
 force=false
 
@@ -44,8 +35,13 @@ if $force && ! $local_mode; then
 fi
 
 if $local_mode; then
-	local_sync
-	setxkbmap -layout us -variant dvp -option caps:swapescape
+	if $force; then
+		cp -fr .bashrc .config .local "$HOME"
+	else
+		cp -ir .bashrc .config .local "$HOME"
+	fi
+
+	setxkbmap -layout us -variant dvp -option caps:swapescape &
 	kwinrc --replace &
 	firefox https://addons.mozilla.org/firefox/downloads/file/4047348/vimium_c-1.99.97.xpi &
 	killall konsole && konsole &
