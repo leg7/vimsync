@@ -49,7 +49,8 @@ local_sync()
 	cp -i vimrc               "$XDG_CONFIG_HOME"/vim/vimrc &&
 	cp -i kwinrc              "$XDG_CONFIG_HOME"/kwinrc &&
 	cp -i kglobalshortcutsrc  "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
-	cp -i dracula.colorscheme "$XDG_DATA_HOME"/konsole/dracula.colorscheme ||
+	cp -i dracula.colorscheme "$XDG_DATA_HOME"/konsole/dracula.colorscheme &&
+	cp -i .bashrc             "$HOME"/.bashrc ||
 	cp_error
 }
 
@@ -62,7 +63,8 @@ remote_sync()
 	mv -i ./vimrc             "$XDG_CONFIG_HOME"/vim/vimrc &&
 	mv -i kwinrc              "$XDG_CONFIG_HOME"/kwinrc &&
 	mv -i kglobalshortcutsrc  "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
-	mv -i dracula.colorscheme "$XDG_DATA_HOME"/konsole/dracula.colorscheme ||
+	mv -i dracula.colorscheme "$XDG_DATA_HOME"/konsole/dracula.colorscheme &&
+	mv -i .bashrc             "$HOME"/.bashrc ||
 	mv_error
 }
 
@@ -84,6 +86,7 @@ while getopts lr:h option; do
 				kwinrc_url="$base/leg7/vimsync/master/kwinrc"
 				kshortcuts_url="$base/leg7/vimsync/master/kglobalshortcutsrc"
 				konsole_url="$base/leg7/vimsync/master/dracula.colorscheme"
+				bashrc_url="$base/leg7/vimsync/master/.bashrc"
 			elif [ "$remote" = "gitea" ]
 			then
 				base="https://git.leonardgomez.xyz"
@@ -91,11 +94,12 @@ while getopts lr:h option; do
 				kwinrc_url="$base/leg7/vimsync/raw/branch/master/kwinrc"
 				kshortcuts_url="$base/leg7/vimsync/raw/branch/master/kglobalshortcutsrc"
 				konsole_url="$base/leg7/vimsync/raw/branch/master/dracula.colorscheme"
+				bashrc_url="$base/leg7/vimsync/raw/branch/master/.bashrc"
 			else
 				syntax_error
 			fi
 
-			url_list="$vimrc_url $kwinrc_url $kshortcuts_url $konsole_url";;
+			url_list="$vimrc_url $kwinrc_url $kshortcuts_url $konsole_url $bashrc_url";;
 		(h | *)
 			syntax_error;;
 	esac
@@ -113,25 +117,7 @@ elif $remote_mode; then
 	remote_sync
 fi
 
-#################
-### Configure ###
-#################
-
-# I should make the bashrc source a shell script with my config instead
-
-# We export these variables for later shell sessions
-{ echo 'export XDG_CONFIG_HOME="$HOME/.config"';
-echo 'export XDG_DATA_HOME="$HOME/.local/share"';
-echo 'export XDG_CACHE_HOME="$HOME/.local/cache"';
-echo 'export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"';
-echo 'konsoleprofile colors=Dracula' ; } >> "$HOME"/.bashrc
-
-# Add vi mode to bash and change keyboard settings. Just press 1 or 9 to change the layout if needed
 setxkbmap -layout us -variant dvp -option caps:swapescape
-{ echo "set -o vi";
-echo 'alias 9="setxkbmap fr -option caps:swapescape"';
-echo 'alias 1="setxkbmap -layout us -variant dvp -option caps:swapescape"'; } >> "$HOME"/.bashrc
 
-# We need to do this to source the new bashrc
 killall konsole && konsole &
 kwinrc --replace &
