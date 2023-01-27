@@ -44,7 +44,11 @@ Plug 'elkowar/yuck.vim'
 
 Plug 'dracula/vim',{ 'as' : 'dracula' }
 Plug 'itchyny/vim-cursorword'
-Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
+
+if !($XDG_CURRENT_DESKTOP ==# "KDE")
+	Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
+endif
+
 Plug 'junegunn/goyo.vim'
 
 " Buffers, workflow
@@ -131,7 +135,7 @@ let &t_EI = "\<Esc>[2 q"
 " Tab complete for fuzzy finding
 if has('wildmenu')
 	set wildmenu wildignorecase wildmode=longest:list,full
-	if has('wildignore')
+	if has('wildignore') && !($XDG_CURRENT_DESKTOP ==# "KDE") " School computer too old
 		set wildoptions=pum
 		set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.jpe,*.png,*.webp,*.svg
 		set wildignore+=*.pdf,*.psd,*.epub,*.ps,*.djvu,*.mobi
@@ -214,7 +218,7 @@ set infercase
 " And show open buffers on top, you can swap between buffers with <leader>n
 " <leader>p and other keys. look at the mappings!
 set laststatus=2
-if !($TERM ==# "xterm-256color")
+if !($XDG_CURRENT_DESKTOP ==# "KDE") " Because the school computer font is bad
 	let g:lightline = {
 		\ 'colorscheme':  'dracula',
 		\ 'separator':    { 'left': '', 'right': '' },
@@ -454,6 +458,8 @@ if has('autocmd')
 	autocmd FileType tex,latex,markdown setlocal spell! | setlocal fp="fmt -w80"
 
 	autocmd FileType html,css setlocal tabstop=4
+
+	autocmd FileType php :MUcompleteAutoOff
 
 	autocmd FileType python,sh set foldmethod=indent
 
