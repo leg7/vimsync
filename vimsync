@@ -23,7 +23,7 @@ print_help()
 
 local_sync()
 {
-	cp -ir .bashrc .config .local "$HOME" &&
+	cp -ir .bashrc .config .local "$HOME" ||
 	cp_error
 }
 
