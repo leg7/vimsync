@@ -51,7 +51,7 @@ local_sync()
 	cp -i kglobalshortcutsrc  "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
 	cp -i dracula.colorscheme "$XDG_DATA_HOME"/konsole/dracula.colorscheme &&
 	cp -i .bashrc             "$HOME"/.bashrc &&
-	cp -i dircolors 					"$XDG_CONFIG_HOME"/dircolors/dracula ||
+	cp -i dracula 					  "$XDG_CONFIG_HOME"/dircolors/dracula ||
 	cp_error
 }
 
@@ -66,7 +66,7 @@ remote_sync()
 	mv -i kglobalshortcutsrc  "$XDG_CONFIG_HOME"/kglobalshortcutsrc &&
 	mv -i dracula.colorscheme "$XDG_DATA_HOME"/konsole/dracula.colorscheme &&
 	mv -i .bashrc             "$HOME"/.bashrc &&
-	mv -i dircolors 					"$XDG_CONFIG_HOME"/dircolors/dracula ||
+	mv -i dracula 					  "$XDG_CONFIG_HOME"/dircolors/dracula ||
 	mv_error
 }
 
@@ -89,7 +89,7 @@ while getopts lr:h option; do
 				kshortcuts_url="$base/leg7/vimsync/master/kglobalshortcutsrc"
 				konsole_url="$base/leg7/vimsync/master/dracula.colorscheme"
 				bashrc_url="$base/leg7/vimsync/master/.bashrc"
-				dircolors_url="$base/leg7/vimsync/master/dircolors"
+				dircolors_url="$base/leg7/vimsync/master/dracula"
 			elif [ "$remote" = "gitea" ]
 			then
 				base="https://git.leonardgomez.xyz"
@@ -98,7 +98,7 @@ while getopts lr:h option; do
 				kshortcuts_url="$base/leg7/vimsync/raw/branch/master/kglobalshortcutsrc"
 				konsole_url="$base/leg7/vimsync/raw/branch/master/dracula.colorscheme"
 				bashrc_url="$base/leg7/vimsync/raw/branch/master/.bashrc"
-				dircolors_url="$base/leg7/vimsync/raw/branch/master/dircolors"
+				dircolors_url="$base/leg7/vimsync/raw/branch/master/dracula"
 			else
 				syntax_error
 			fi
