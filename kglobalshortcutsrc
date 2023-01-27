@@ -1,5 +1,6 @@
 [ActivityManager]
 _k_friendly_name=Gestion des activités
+switch-to-activity-46b37daa-3fc8-466b-829b-37130b27bd5e=none,none,Passer à l'activité « Défaut »
 switch-to-activity-5bda342f-25cc-4b60-b63c-887409dc3852=none,none,Passer à l'activité « Défaut »
 
 [KDE Keyboard Layout Switcher]
@@ -24,9 +25,9 @@ display=Display,Display\tMeta+P,Changer d'affichage
 
 [khotkeys]
 _k_friendly_name=Service personnalisé de raccourcis\s
-{1cf2359f-2c68-434b-8789-f1243b190240}=Meta+Shift+Return,none,konsole
+{14d14ba4-62b1-42b6-922a-35c0ac2af4e9}=Meta+Shift+Return,none,term
+{24711227-f056-4ab6-bf84-25043c3c1645}=,none,Launch Konsole
 {d03619b6-9b3c-48cc-9d9c-a2aadb485550}=,none,Rechercher
-{eecee89a-276f-4146-9223-d298e5571f65}=Ctrl+Alt+T,none,Launch Konsole
 
 [kmix]
 _k_friendly_name=Volume audio
@@ -75,7 +76,7 @@ Switch One Desktop to the Left=none,Meta+Ctrl+Left,Passer au bureau de gauche
 Switch One Desktop to the Right=none,Meta+Ctrl+Right,Passer au bureau de droite
 Switch Window Down=Meta+J,Meta+Alt+Down,Basculer vers une fenêtre en-dessous
 Switch Window Left=Meta+H,Meta+Alt+Left,Basculer vers une fenêtre à gauche
-Switch Window Right=,Meta+Alt+Right,Basculer vers une fenêtre à droite
+Switch Window Right=Meta+L,Meta+Alt+Right,Basculer vers une fenêtre à droite
 Switch Window Up=Meta+K,Meta+Alt+Up,Basculer vers une fenêtre au-dessus
 Switch to Desktop 1=Ctrl+F1,Ctrl+F1,Passer au bureau 1
 Switch to Desktop 10=none,none,Passer au bureau 10
@@ -130,13 +131,13 @@ Window Fullscreen=none,none,Mettre une fenêtre en plein écran
 Window Grow Horizontal=none,none,Empiler horizontalement une fenêtre en croissance
 Window Grow Vertical=none,none,Empiler verticalement une fenêtre en croissance
 Window Lower=none,none,Enrouler une fenêtre
-Window Maximize=Meta+M\tMeta+PgUp,Meta+PgUp,Maximiser une fenêtre
+Window Maximize=Meta+F\tMeta+PgUp,Meta+PgUp,Maximiser une fenêtre
 Window Maximize Horizontal=none,none,Maximiser horizontalement une fenêtre
 Window Maximize Vertical=none,none,Maximiser verticalement une fenêtre
 Window Minimize=Meta+PgDown,Meta+PgDown,Réduire une fenêtre
 Window Move=none,none,Déplacer une fenêtre
 Window No Border=none,none,Cacher une bordure de fenêtre
-Window On All Desktops=Meta+S,none,Conserver une fenêtre sur tous les bureaux
+Window On All Desktops=Meta+A,none,Conserver une fenêtre sur tous les bureaux
 Window One Desktop Down=none,none,Envoyer une fenêtre sur le bureau en dessous
 Window One Desktop Up=none,none,Envoyer une fenêtre sur le bureau au-dessus
 Window One Desktop to the Left=none,none,Envoyer une fenêtre sur le bureau à gauche
@@ -179,9 +180,9 @@ Window to Desktop 6=none,none,Envoyer une fenêtre sur le bureau 6
 Window to Desktop 7=none,none,Envoyer une fenêtre sur le bureau 7
 Window to Desktop 8=none,none,Envoyer une fenêtre sur le bureau 8
 Window to Desktop 9=none,none,Envoyer une fenêtre sur le bureau 9
-Window to Next Desktop=Meta+Shift+L,none,Envoyer une fenêtre sur le bureau suivant
+Window to Next Desktop=Meta+Shift+N,none,Envoyer une fenêtre sur le bureau suivant
 Window to Next Screen=none,none,Envoyer une fenêtre sur l'écran suivant
-Window to Previous Desktop=Meta+Shift+H,none,Envoyer une fenêtre sur le bureau précédent
+Window to Previous Desktop=Meta+Shift+P,none,Envoyer une fenêtre sur le bureau précédent
 Window to Previous Screen=none,none,Envoyer une fenêtre sur l'écran précédent
 Window to Screen 0=none,none,Envoyer la fenêtre sur l'écran 0
 Window to Screen 1=none,none,Envoyer la fenêtre sur l'écran 1
