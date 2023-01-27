@@ -1,18 +1,19 @@
 #!/bin/sh
 
-syntax_error()
+bad_opition()
 {
-	print_help
+	usage
 	exit 1
 }
 
-print_help()
+usage()
 {
 	printf "USAGE:
 	\t./vimsync OPTION
 	OPTIONS:
 	\t-h       : show this help message
-	\t-l       : sync with local files (you need to have cloned the repo for this to work)"
+	\t-l       : sync with local files (you need to have cloned the repo for this to work)
+	\t-f 			 : force the copy"
 }
 
 local_sync()
@@ -34,19 +35,19 @@ while getopts lfh option; do
 		(f)
 			force=true;;
 		(h | *)
-			syntax_error;;
+			bad_option;;
 	esac
 done
 
 if $force && ! $local_mode; then
-	syntax_error
+	bad_option
 fi
 
 if $local_mode; then
 	local_sync
+	setxkbmap -layout us -variant dvp -option caps:swapescape
+	killall konsole && konsole &
+	kwinrc --replace &
+else
+	bad_option
 fi
-
-setxkbmap -layout us -variant dvp -option caps:swapescape
-
-killall konsole && konsole &
-kwinrc --replace &
