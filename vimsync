@@ -13,7 +13,7 @@ usage()
 	OPTIONS:
 	\t-h       : show this help message
 	\t-l       : sync with local files (you need to have cloned the repo for this to work)
-	\t-f 			 : force the copy"
+	\t-f 			 : force the copy\n"
 }
 
 local_sync()
