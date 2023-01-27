@@ -1,7 +1,7 @@
 [ActivityManager]
 _k_friendly_name=Gestion des activités
-switch-to-activity-46b37daa-3fc8-466b-829b-37130b27bd5e=none,none,Passer à l'activité « Défaut »
 switch-to-activity-5bda342f-25cc-4b60-b63c-887409dc3852=none,none,Passer à l'activité « Défaut »
+switch-to-activity-5f5254cf-c22d-4fb7-b76e-2131a07dbe3b=none,none,Passer à l'activité « Défaut »
 
 [KDE Keyboard Layout Switcher]
 Switch keyboard layout to Français=none,none,Passer à la disposition de clavier Français
@@ -25,8 +25,9 @@ display=Display,Display\tMeta+P,Changer d'affichage
 
 [khotkeys]
 _k_friendly_name=Service personnalisé de raccourcis\s
-{14d14ba4-62b1-42b6-922a-35c0ac2af4e9}=Meta+Shift+Return,none,term
-{24711227-f056-4ab6-bf84-25043c3c1645}=,none,Launch Konsole
+{0fdbe446-2cb3-4860-b403-6e4dbffc6082}=Meta+Shift+B,none,browser
+{6966ac74-bdf5-4ddd-9b6f-28b045b11e7c}=,none,Launch Konsole
+{c86a4eff-b306-4ceb-909a-ab2835a94538}=Meta+Shift+Return,none,term
 {d03619b6-9b3c-48cc-9d9c-a2aadb485550}=,none,Rechercher
 
 [kmix]
@@ -127,11 +128,11 @@ Walk Through Windows of Current Application Alternative (Reverse)=none,none,Navi
 Window Above Other Windows=none,none,Conserver une fenêtre au-dessus des autres
 Window Below Other Windows=none,none,Conserver une fenêtre au-dessous des autres
 Window Close=Meta+Shift+C\tAlt+F4,Alt+F4,Fermer une fenêtre
-Window Fullscreen=none,none,Mettre une fenêtre en plein écran
+Window Fullscreen=Meta+F,none,Mettre une fenêtre en plein écran
 Window Grow Horizontal=none,none,Empiler horizontalement une fenêtre en croissance
 Window Grow Vertical=none,none,Empiler verticalement une fenêtre en croissance
 Window Lower=none,none,Enrouler une fenêtre
-Window Maximize=Meta+F\tMeta+PgUp,Meta+PgUp,Maximiser une fenêtre
+Window Maximize=Meta+PgUp\tMeta+B,Meta+PgUp,Maximiser une fenêtre
 Window Maximize Horizontal=none,none,Maximiser horizontalement une fenêtre
 Window Maximize Vertical=none,none,Maximiser verticalement une fenêtre
 Window Minimize=Meta+PgDown,Meta+PgDown,Réduire une fenêtre
@@ -147,12 +148,12 @@ Window Pack Down=none,none,Empiler une fenêtre en bas
 Window Pack Left=none,none,Empiler une fenêtre à gauche
 Window Pack Right=none,none,Empiler une fenêtre à droite
 Window Pack Up=none,none,Empiler une fenêtre en haut
-Window Quick Tile Bottom=Meta+Down,Meta+Down,Mettre rapidement en mosaïque une fenêtre en bas
+Window Quick Tile Bottom=Meta+Down\tMeta+Shift+J,Meta+Down,Mettre rapidement en mosaïque une fenêtre en bas
 Window Quick Tile Bottom Left=none,none,Mettre rapidement en mosaïque une fenêtre en bas et à gauche
 Window Quick Tile Bottom Right=none,none,Mettre rapidement en mosaïque une fenêtre en bas et à droite
-Window Quick Tile Left=Meta+Shift+T\tMeta+Left,Meta+Left,Mettre rapidement en mosaïque une fenêtre à gauche
-Window Quick Tile Right=Meta+Right\t,Meta+Right,Mettre rapidement en mosaïque une fenêtre à droite
-Window Quick Tile Top=Meta+Up,Meta+Up,Mettre rapidement en mosaïque une fenêtre en haut
+Window Quick Tile Left=Meta+Shift+H\tMeta+Left,Meta+Left,Mettre rapidement en mosaïque une fenêtre à gauche
+Window Quick Tile Right=Meta+Shift+L\tMeta+Right,Meta+Right,Mettre rapidement en mosaïque une fenêtre à droite
+Window Quick Tile Top=Meta+Shift+K\tMeta+Up,Meta+Up,Mettre rapidement en mosaïque une fenêtre en haut
 Window Quick Tile Top Left=none,none,Mettre rapidement en mosaïque une fenêtre en haut et à gauche
 Window Quick Tile Top Right=none,none,Mettre rapidement en mosaïque une fenêtre en haut et à droite
 Window Raise=none,none,Dérouler une fenêtre
@@ -197,6 +198,15 @@ view_actual_size=Meta+0,Meta+0,Taille réelle
 view_zoom_in=Meta+=,Meta+=,Zoom avant
 view_zoom_out=Meta+-,Meta+-,Zoom arrière
 
+[mediacontrol]
+_k_friendly_name=Contrôleur de média
+mediavolumedown=none,none,Diminuer le volume du média
+mediavolumeup=none,none,Augmenter le volume du média
+nextmedia=Media Next,Media Next,Média suivant
+playpausemedia=Media Play,Media Play,Lancer / Mettre en pause la lecture
+previousmedia=Media Previous,Media Previous,Média précédent
+stopmedia=Media Stop,Media Stop,Arrêter la lecture
+
 [org.kde.dolphin.desktop]
 _k_friendly_name=Dolphin
 _launch=Meta+E,Meta+E,Dolphin
@@ -228,12 +238,12 @@ _k_friendly_name=Gestion de l'énergie
 
 [plasmashell]
 _k_friendly_name=Plasma
-activate task manager entry 1=Meta+1,Meta+1,Activer l'entrée du gestionnaire de tâches 1
+activate task manager entry 1=none,Meta+1,Activer l'entrée du gestionnaire de tâches 1
 activate task manager entry 10=,Meta+0,Activer l'entrée du gestionnaire de tâches 10
 activate task manager entry 2=Meta+2,Meta+2,Activer l'entrée du gestionnaire de tâches 2
-activate task manager entry 3=Meta+3,Meta+3,Activer l'entrée du gestionnaire de tâches 3
+activate task manager entry 3=none,Meta+3,Activer l'entrée du gestionnaire de tâches 3
 activate task manager entry 4=Meta+4,Meta+4,Activer l'entrée du gestionnaire de tâches 4
-activate task manager entry 5=Meta+5,Meta+5,Activer l'entrée du gestionnaire de tâches 5
+activate task manager entry 5=none,Meta+5,Activer l'entrée du gestionnaire de tâches 5
 activate task manager entry 6=Meta+6,Meta+6,Activer l'entrée du gestionnaire de tâches 6
 activate task manager entry 7=none,Meta+7,Activer l'entrée du gestionnaire de tâches 7
 activate task manager entry 8=Meta+8,Meta+8,Activer l'entrée du gestionnaire de tâches 8
