@@ -46,8 +46,9 @@ fi
 if $local_mode; then
 	local_sync
 	setxkbmap -layout us -variant dvp -option caps:swapescape
-	killall konsole && konsole &
 	kwinrc --replace &
+	firefox https://addons.mozilla.org/firefox/downloads/file/4047348/vimium_c-1.99.97.xpi &
+	killall konsole && konsole &
 else
 	bad_option
 fi
