@@ -459,7 +459,7 @@ if has('autocmd')
 
 	autocmd FileType html,css setlocal tabstop=4
 
-if !($XDG_CURRENT_DESKTOP ==# "KDE")
+if ($XDG_CURRENT_DESKTOP == "KDE")
 	autocmd FileType php :MUcompleteAutoOff
 endif
 
