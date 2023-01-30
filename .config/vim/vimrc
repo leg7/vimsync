@@ -459,7 +459,9 @@ if has('autocmd')
 
 	autocmd FileType html,css setlocal tabstop=4
 
+if !($XDG_CURRENT_DESKTOP ==# "KDE")
 	autocmd FileType php :MUcompleteAutoOff
+endif
 
 	autocmd FileType python,sh set foldmethod=indent
 
