@@ -37,26 +37,22 @@ endif
 call plug#begin('$XDG_DATA_HOME/vim/plugged')
 
 " Polyglot decides to mess with tab settings for whatever reason
-let g:polyglot_disabled = ['autoindent']
+" let g:polyglot_disabled = ['autoindent']
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-scripts/dbext.vim'
 Plug 'elkowar/yuck.vim'
-
+Plug 'lifepillar/vim-mucomplete'
 Plug 'dracula/vim',{ 'as' : 'dracula' }
-Plug 'itchyny/vim-cursorword'
-
 if !($XDG_CURRENT_DESKTOP ==# "KDE")
 	Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
 endif
-
+Plug 'itchyny/vim-cursorword'
 Plug 'junegunn/goyo.vim'
-
 " Buffers, workflow
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug 'justinmk/vim-dirvish'
 Plug 'Konfekt/FastFold'
-
 " Text operations/manipulation
 Plug 'wellle/targets.vim'
 Plug 'justinmk/vim-sneak'
@@ -66,12 +62,9 @@ Plug 'tpope/vim-repeat'
 Plug 'tommcdo/vim-lion'
 Plug 'tommcdo/vim-exchange'
 Plug 'mbbill/undotree'
-Plug 'zirrostig/vim-schlepp'
 Plug 'tomtom/tcomment_vim'
 Plug 'mattn/emmet-vim', { 'for': [ 'html', 'css', 'php', 'javascript' ] }
 Plug 'preservim/vim-pencil'
-
-Plug 'lifepillar/vim-mucomplete'
 
 call plug#end()
 
@@ -198,9 +191,6 @@ else
 	set autoindent
 endif
 
-"set tabstop=8
-"set shiftwidth=0
-"set noexpandtab
 
 "-----------------------
 "=== Plugin settings ===
@@ -459,12 +449,13 @@ if has('autocmd')
 
 	autocmd FileType html,css setlocal tabstop=4
 
-if ($XDG_CURRENT_DESKTOP == "KDE")
-	autocmd FileType php :MUcompleteAutoOff
-endif
+	if ($XDG_CURRENT_DESKTOP ==# "KDE")
+		autocmd FileType php :MUcompleteAutoOff
+	endif
 
 	autocmd FileType python,sh set foldmethod=indent
 
+	autocmd BufRead * set tabstop=4 | set shiftwidth=0 | set noexpandtab
 
 	autocmd BufNewFile,BufRead * if empty(&filetype) | setlocal fp="fmt -w80" | endif
 
