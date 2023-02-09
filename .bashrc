@@ -63,14 +63,6 @@ xterm*|rxvt*)
     ;;
 esac
 
-# colored GCC warnings and errors
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
@@ -102,7 +94,7 @@ export BROWSER="firefox"
 # Keyboard
 set -o vi
 alias 9="setxkbmap fr -option caps:swapescape"
-alias 1="setxkbmap -layout us -variant dvp -option caps:swapescape"
+alias 1="xkbcomp $HOME/.config/xkb/latin-programmer-dvorak $DISPLAY"
 
 # Aliases
 alias conf="cd $XDG_CONFIG_HOME"
@@ -111,6 +103,7 @@ alias cache="cd $XDG_CACHE_HOME"
 alias bin='cd ~/.local/bin'
 
 # Colors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors/dracula)"
 alias ls='ls --color=auto --group-directories-first'
 alias grep='grep --color'
