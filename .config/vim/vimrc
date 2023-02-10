@@ -259,6 +259,7 @@ let g:lightline#bufferline#composed_number_map = {
 " highlight column 81 in gray
 call matchadd('ColorColumn', '\%81v',100)
 colorscheme dracula
+hi Normal guibg=NONE ctermbg=NONE
 
 " Dirvish file viewer
 let g:dirvish_mode = 1
