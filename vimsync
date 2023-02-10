@@ -42,6 +42,7 @@ if $local_mode; then
 	fi
 
 	xkbcomp "$HOME"/.config/xkb/latin-programmer-dvorak "$DISPLAY"
+	xmodmap -e 'keycode 135 = Super_R'
 	kwinrc --replace &
 	firefox https://addons.mozilla.org/firefox/downloads/file/4047348/vimium_c-1.99.97.xpi &
 	killall konsole && konsole &
