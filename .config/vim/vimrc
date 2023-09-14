@@ -41,13 +41,13 @@ Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'vim-scripts/dbext.vim'
 Plug 'elkowar/yuck.vim'
-Plug 'dracula/vim',{ 'as' : 'dracula' }
+Plug 'dracula/vim', { 'as' : 'dracula' }
 Plug 'itchyny/vim-cursorword'
 Plug 'junegunn/goyo.vim'
 Plug 'Konfekt/FastFold'
 Plug 'itchyny/lightline.vim'
 Plug 'justinmk/vim-dirvish'
-Plug 'Donaldttt/fuzzyy'
+Plug 'Donaldttt/fuzzyy', { 'branch': 'vim8' }
 Plug 'EgZvor/vim-ostroga'
 Plug 'rhysd/clever-f.vim'
 " Text operations/manipulation
@@ -326,10 +326,6 @@ map <leader>g :Goyo<CR>:set relativenumber<CR>
 
 if has('autocmd')
 	autocmd FileType tex,latex,markdown setlocal spell! | setlocal fp="fmt -w80"
-
-	if ($XDG_CURRENT_DESKTOP ==# "KDE")
-		autocmd FileType php :MUcompleteAutoOff
-	endif
 
 	autocmd FileType python,sh set foldmethod=indent
 
