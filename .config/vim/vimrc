@@ -33,26 +33,23 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" Install my plugins
 call plug#begin('$XDG_DATA_HOME/vim/plugged')
-
-" Polyglot decides to mess with tab settings for whatever reason
-" let g:polyglot_disabled = ['autoindent']
 Plug 'sheerun/vim-polyglot'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'vim-scripts/dbext.vim'
 Plug 'elkowar/yuck.vim'
-Plug 'lifepillar/vim-mucomplete'
 Plug 'dracula/vim',{ 'as' : 'dracula' }
-if !($XDG_CURRENT_DESKTOP ==# "KDE")
-	Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
-endif
 Plug 'itchyny/vim-cursorword'
 Plug 'junegunn/goyo.vim'
-" Buffers, workflow
-Plug 'itchyny/lightline.vim'
-Plug 'mengelbrecht/lightline-bufferline'
-Plug 'justinmk/vim-dirvish'
 Plug 'Konfekt/FastFold'
+Plug 'itchyny/lightline.vim'
+Plug 'justinmk/vim-dirvish'
+Plug 'Donaldttt/fuzzyy'
+Plug 'EgZvor/vim-ostroga'
+Plug 'rhysd/clever-f.vim'
 " Text operations/manipulation
 Plug 'wellle/targets.vim'
 Plug 'justinmk/vim-sneak'
@@ -65,10 +62,7 @@ Plug 'mbbill/undotree'
 Plug 'tomtom/tcomment_vim'
 Plug 'mattn/emmet-vim', { 'for': [ 'html', 'css', 'php', 'javascript' ] }
 Plug 'preservim/vim-pencil'
-
 call plug#end()
-
-runtime! macros/matchit.vim
 
 "================
 "=== Settings ===
@@ -78,27 +72,22 @@ runtime! macros/matchit.vim
 let loaded_netrw = 1
 let loaded_netrwPlugin = 1      "netrw -> 🗑
 
-set encoding=utf-8
-
-set ttyfast lazyredraw
-set updatetime=750
-
-set clipboard=unnamedplus
+set clipboard=unnamedplus " for x11 systems
 nnoremap <C-p> :r!wl-paste<CR>
 xnoremap <silent> <C-y> :w !wl-copy<CR><CR>
 
 set hidden
 
-set scrolloff=5 sidescrolloff=5
+set scrolloff=9 sidescrolloff=9
 
 set shortmess=a
 set title
-set number relativenumber
+set relativenumber
 
 " Search
 set ignorecase smartcase
 if has('extra_search')
-	set hlsearch incsearch
+	set nohlsearch incsearch
 endif
 
 if has('cmdline_info')
@@ -150,22 +139,12 @@ else
 endif
 set updatecount=10
 
-" Project navigation, open vim in the root dir of your project and then
-" Use find <filename> to open new buffer with the filename.
-" This is neat but I prefer to use e */**<file> since it has better fuzzy
-" finding (look at my binding)
-" the benefit of find is that it is not relative to your current directory
-if has('path_extra')
-	set path=$PWD/**
-endif
-
 " Folds
 if has('folding')
-	if (&ft == '')
-		set foldmethod=manual
-	else
-		set foldmethod=syntax
-	endif
+	"Let the lsp handle folding
+	set foldmethod=expr
+				\ foldexpr=lsp#ui#vim#folding#foldexpr()
+				\ foldtext=lsp#ui#vim#folding#foldtext()
 
 	set foldnestmax=1
 	set foldlevelstart=20
@@ -191,70 +170,39 @@ else
 	set autoindent
 endif
 
-
 "-----------------------
 "=== Plugin settings ===
 "-----------------------
 
 let g:lion_squeeze_spaces = 1
 
-" Autocompletion with mucomplete
-let g:mucomplete#enable_auto_at_startup = 1
-let g:mucomplete#completion_delay = 300
-set completeopt=menuone,noinsert
+" Autocompletion with asynccomplete
 set infercase
+let g:asyncomplete_auto_completeopt = 0
+set completeopt=menuone,noinsert,noselect,preview
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+let g:asyncomplete_auto_popup = 0
 
-" Lightline plugin get cool triangular font instead of square
-" And show open buffers on top, you can swap between buffers with <leader>n
-" <leader>p and other keys. look at the mappings!
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ asyncomplete#force_refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" Lightline
 set laststatus=2
-if !($XDG_CURRENT_DESKTOP ==# "KDE") " Because the school computer font is bad
-	let g:lightline = {
-		\ 'colorscheme':  'dracula',
-		\ 'separator':    { 'left': '', 'right': '' },
-		\ 'subseparator': { 'left': '', 'right': '' },
-		\ 'active': {
-		\   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ] ]
-		\ },
-		\ 'tabline': {
-		\   'left': [ ['buffers'] ],
-		\   'right': [ ['close'] ]
-		\ },
-		\ 'component_expand': {
-		\   'buffers': 'lightline#bufferline#buffers'
-		\ },
-		\ 'component_type': {
-		\   'buffers': 'tabsel'
-		\ }
-		\ }
-else
-	let g:lightline = {
-		\ 'colorscheme':  'dracula',
-		\ 'active': {
-		\   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ] ]
-		\ },
-		\ 'tabline': {
-		\   'left': [ ['buffers'] ],
-		\   'right': [ ['close'] ]
-		\ },
-		\ 'component_expand': {
-		\   'buffers': 'lightline#bufferline#buffers'
-		\ },
-		\ 'component_type': {
-		\   'buffers': 'tabsel'
-		\ }
-		\ }
-endif
-
-set showtabline=2
-let g:lightline#bufferline#show_number = 2
-let g:lightline#bufferline#filename_modifier = ':.'
-let g:lightline#bufferline#number_separator = ' '
-let g:lightline#bufferline#composed_number_map = {
-\ 1:  '#1',  2:  '#2',  3:  '#3',  4:  '#4',  5:  '#5',
-\ 6:  '#6',  7:  '#7',  8:  '#8',  9:  '#9',  10: '#10',
-\ 11: '#11', 12: '#12', 13: '#13', 14: '#14', 15: '#15',
-\ 16: '#16', 17: '#17', 18: '#18', 19: '#19', 20: '#20'}
+set noshowmode
+let g:lightline = {
+	\ 'colorscheme':  'dracula',
+	\ 'active': {
+	\   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ] ]
+	\ },
+	\ }
 
 " highlight column 81 in gray
 call matchadd('ColorColumn', '\%81v',100)
@@ -266,8 +214,9 @@ let g:dirvish_mode = 1
 let g:dirvish_relative_paths = 0
 call dirvish#add_icon_fn({p -> p[-1:]=='/'?'📂':'📄'})
 
-" Color highligting
-let g:Hexokinase_highlighters = [ 'background' ]
+" Ostorga Jump forget marks
+" Search upwards for a manually created .viminfo file or use a default
+let &viminfofile=findfile('.viminfo','.;') ?? $XDG_CACHE_HOME . '/vim/viminfo'
 
 "=======================
 "=== Global Bindings ===
@@ -279,136 +228,74 @@ let mapleader=" "
 nnoremap v <C-V>
 nnoremap <C-v> v
 
-" Better bindings for navigating splits
+" Move stuff in visual mode (wow)
+vnoremap J :m+1<CR>gv=gv
+vnoremap K :m-2<CR>gv=gv
+
+" Don't move cursor around
+nnoremap J mzJ`z
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Delete or paste without changing your yank buffer
+xmap <leader>p "_dP
+nmap <leader>d "_d
+vmap <leader>d "_d
+
+" Time savers
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 map <leader>q :close<CR>
-
-" Easier saving
 map <leader>w :wa<CR>
+map <leader>x :!chmod +x %<CR>
+map <leader>cc :bd<CR>
+noremap Q <nop>
 
-map <leader>f :filetype detect<CR>
+" Substitute the word you're on
+map <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
 
-" --
-" Open files in buffers or splits with fuzzy finding
-" --
-map <leader>v :vs **/*
-map <leader>h :sp **/*
-map <leader>e :e **/*
+" Fuzzy grep the word under the cursor
+nnoremap <Space>f :FuzzyGrep <C-R><C-W><CR>
 
-" --
-"  Convert camel_case to snake_case
-"  --
+" Compile and run c++ file for classes
+map <leader>m :!g++ -Wpedantic -O3 %:p -o %:p:r.out && %:p:r.out<CR>
+
+" Convert camel_case to snake_case
 command -range SnakeCase <line1>,<line2>s#\(\<\u\l\+\|\l\+\)\(\u\)#\l\1_\l\2#g
 map <leader>sk :SnakeCase<CR>:noh<CR>
-
 command -range CamelCase <line1>,<line2>s/\(_\)\(.\)/\u\2/g
 map <leader>ck :CamelCase<CR>:noh<CR>
 
-" --
-" Buffer controls with the lightline bufferline plugin
-" --
-map <leader>cc :bd<CR>
+" Harpoon from wish
+nnoremap <leader><leader> <cmd>OstrogaJump<cr>
 
-nmap <LEFT> :bprevious<CR>
-nmap <RIGHT> :bnext<CR>
-nmap <leader>p :bprevious<CR>
-nmap <leader>n :bnext<CR>
+" lsp
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 
-nmap <Leader>& <Plug>lightline#bufferline#go(1)
-nmap <Leader>[ <Plug>lightline#bufferline#go(2)
-nmap <Leader>{ <Plug>lightline#bufferline#go(3)
-nmap <Leader>} <Plug>lightline#bufferline#go(4)
-nmap <Leader>( <Plug>lightline#bufferline#go(5)
-nmap <Leader>= <Plug>lightline#bufferline#go(6)
-nmap <Leader>* <Plug>lightline#bufferline#go(7)
-nmap <Leader>) <Plug>lightline#bufferline#go(8)
-nmap <Leader>+ <Plug>lightline#bufferline#go(9)
-nmap <Leader>] <Plug>lightline#bufferline#go(10)
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
 
-nmap <Leader>c& <Plug>lightline#bufferline#delete(1)
-nmap <Leader>c[ <Plug>lightline#bufferline#delete(2)
-nmap <Leader>c{ <Plug>lightline#bufferline#delete(3)
-nmap <Leader>c} <Plug>lightline#bufferline#delete(4)
-nmap <Leader>c( <Plug>lightline#bufferline#delete(5)
-nmap <Leader>c= <Plug>lightline#bufferline#delete(6)
-nmap <Leader>c* <Plug>lightline#bufferline#delete(7)
-nmap <Leader>c) <Plug>lightline#bufferline#delete(8)
-nmap <Leader>c+ <Plug>lightline#bufferline#delete(9)
-nmap <Leader>c] <Plug>lightline#bufferline#delete(10)
-
-" schlepp
-vmap <unique> <up>    <Plug>SchleppUp
-vmap <unique> <down>  <Plug>SchleppDown
-vmap <unique> <left>  <Plug>SchleppLeft
-vmap <unique> <right> <Plug>SchleppRight
-
-" SQL Stuff
-
-" Automatically create drop statement at the head of the file for current line
-func DropTemplate()
-	if getline(".") =~? "TABLE" || getline(".") =~? "VIEW"
-		exe "normal 0wy2eggODROP \<Esc>pbiIF EXISTS \<Esc>A;\<Esc><C-o>"
-	elseif getline(".") =~? "SEQUENCE"
-		exe "normal 0wy2egg}ODROP \<Esc>pbiIF EXISTS \<Esc>A;\<Esc><C-o>"
-	endif
-endfunc
-map <leader>fd :call DropTemplate()<CR>
-
-
-" Macro to generate sql code from a table template like
-" MyTable (Attribute1, Attribute2, Attr3)
-func TableTemplate()
-	" These strings are basically macros
-	let l:TableStruct   = "ICREATE TABLE \<Esc>wvEguf(a\<CR>\<Esc>i\<CR>;\<Esc>h%j"
-	let l:ContentStruct = "OPRIMARY KEY (),\<CR>FOREIGN KEY (attribute) REFERENCES table_name(attribute),\<Esc>j0"
-	let l:ContentAlign = "0f,i TYPE\<Esc>la\<CR>\<Esc>"
-	let l:CallDropTemplate = "?CREATE TABLE \<CR>:call DropTemplate()\<CR>\<C-o>\<C-o>"
-	let l:SetPrimaryKey = "3jwye2kf(p"
-	let l:EndStruct = "2jV/);\<CR>gl /);\<CR>o\<Esc>j"
-
-	exe "normal " .. TableStruct
-
-	exe "normal " .. ContentStruct
-	while getline('.') =~? ','
-		exe "normal " .. ContentAlign
-	endwhile
-	exe "normal a TYPE\<Esc>"
-
-	exe "normal " CallDropTemplate .. SetPrimaryKey .. EndStruct
-endfunc
-map <leader>ft :call TableTemplate()<CR>
-
-" Take table data and format it for an sql insert
-" This quotes integers and dates too because vimscript sucks
-func InsertTemplate()
-	let l:Clean = "O\<Esc>j}o\<Esc>{j"
-	let l:InsertStruct = "OINSERT INTO table_name(attr1,attr2,...)\<CR>VALUES \<Esc>j"
-	let l:LineStruct = "A)\<Esc>I(\<Esc>w"
-	let l:ContentStruct = "vt S'f r,w"
-	let l:EndStruct = "k$r;{3jI\<BS>\<Esc>V}gl(}"
-
-	exe "normal " .. Clean .. InsertStruct
-
-	while getline(".") !~ '^$'
-		exe "normal " .. LineStruct
-		while getline(".") =~? " "
-			exe "normal " .. ContentStruct
-		endwhile
-		exe "normal vEhS'A,\<Esc>j"
-	endwhile
-	exe "normal " .. EndStruct
-endfunc
-map <leader>fi :call InsertTemplate()<CR>
-
-" Fix formatting of data that had spaces in it
-func FixInsertValue()
-	let l:Fix = "f'vf'c \<Esc>F'j"
-	exe "normal " .. Fix
-endfunc
-map <leader>ff :call FixInsertValue()<CR>
+    " refer to doc to add more commands
+endfunction
 
 " --
 " TOGGLES
@@ -416,9 +303,6 @@ map <leader>ff :call FixInsertValue()<CR>
 
 " undotree
 map <leader>u :UndotreeToggle<CR>
-
-" Disable highlight search
-map <silent> <leader><leader> :noh<CR>
 
 " Look at folding settings
 map <silent> <leader>o :call ToggleOverview()<CR>
@@ -433,13 +317,8 @@ function ToggleReadonly()
 	endif
 endfunction
 
-" Toggle spellcheck
-map <leader>s :setlocal spell!<CR>
-
 " (centered text plugin)
-map <leader>g :Goyo<CR>
-
-map <leader>m :!g++ -Wpedantic -O3 %:p -o %:p:r.out && %:p:r.out<CR>
+map <leader>g :Goyo<CR>:set relativenumber<CR>
 
 "====================================================
 "=== Some autoexec commands and filetype bindings ===
@@ -448,15 +327,11 @@ map <leader>m :!g++ -Wpedantic -O3 %:p -o %:p:r.out && %:p:r.out<CR>
 if has('autocmd')
 	autocmd FileType tex,latex,markdown setlocal spell! | setlocal fp="fmt -w80"
 
-	autocmd FileType html,css setlocal tabstop=4
-
 	if ($XDG_CURRENT_DESKTOP ==# "KDE")
 		autocmd FileType php :MUcompleteAutoOff
 	endif
 
 	autocmd FileType python,sh set foldmethod=indent
-
-	autocmd BufRead * set tabstop=4 | set shiftwidth=0 | set noexpandtab
 
 	autocmd BufNewFile,BufRead * if empty(&filetype) | setlocal fp="fmt -w80" | endif
 
