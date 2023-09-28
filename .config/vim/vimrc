@@ -82,7 +82,7 @@ set scrolloff=9 sidescrolloff=9
 
 set shortmess=a
 set title
-set relativenumber
+set number relativenumber
 
 " Search
 set ignorecase smartcase
@@ -330,8 +330,6 @@ if has('autocmd')
 	autocmd FileType python,sh set foldmethod=indent
 
 	autocmd BufNewFile,BufRead * if empty(&filetype) | setlocal fp="fmt -w80" | endif
-
-	autocmd BufWritePre *.sql silent %s/\<\w\+\>/\=synIDattr(synID(line('.'),col('.'),1), 'name')=~?'sql\%(keyword\|operator\|statement\|type\|function\)'?toupper(submatch(0)):submatch(0)/g |''
 
 	autocmd BufWritePre * %s/\s\+$//e " Remove trailing spaces
 

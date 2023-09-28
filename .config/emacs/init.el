@@ -4,11 +4,11 @@
 
 ;;------ UI ------
 
-(set-frame-parameter (selected-frame) 'alpha-background 96)
-(add-to-list 'default-frame-alist '(alpha-background . (96 . 91)))
+(set-frame-parameter (selected-frame) 'alpha-background 97)
+(add-to-list 'default-frame-alist '(alpha-background . (97 . 91)))
 
 (add-to-list 'default-frame-alist '(font . "monospace-10.5"))
-(menu-bar-mode 1)
+(menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (fringe-mode 0)
@@ -18,10 +18,6 @@
 
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
-
-(tab-bar-mode) ;; Map tab-next and tab-previous
-(setq tab-bar-show 0)
-(global-tab-line-mode) ;; Map previous-buffer, next-buffer, ido-switch-buffer
 
 (setq display-time-default-load-average nil)
 (column-number-mode)
@@ -83,7 +79,6 @@
       auto-save-file-name-transforms '((".*" "~/.local/share/emacs/auto-saves/" t))
       auto-save-list-file-prefix "~/.local/share/emacs/auto-saves/")
 
-;; test when v29 comes out
 (when (fboundp 'startup-redirect-eln-cache)
   (startup-redirect-eln-cache "~/.local/cache/emacs/eln-cache/"))
 
@@ -104,25 +99,23 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-(use-package dracula-theme
-  :config (load-theme 'dracula t))
+;; Aesthetics
 
-(use-package diminish
-  :hook (prog-mode . (lambda() (diminish 'hs-minor-mode)))
+(use-package dashboard
   :config
-  (diminish 'global-whitespace-mode)
-  (diminish 'abbrev-mode)
-  (diminish 'subword-mode)
-  (diminish 'eldoc-mode))
+  (dashboard-setup-startup-hook))
+
+(use-package doom-modeline
+  :init
+  (doom-modeline-mode 1))
+
+(use-package dracula-theme
+  :config
+  (load-theme 'dracula t))
 
 (use-package rainbow-mode
   :hook prog-mode
   :diminish)
-
-;; (use-package dimmer ;; Not using until they fix it with corefu
-;;   :config
-;;   (dimmer-mode)
-;;   (setq dimmer-fraction 0.25))
 
 ;; Completion
 
@@ -146,67 +139,33 @@
 (use-package marginalia
   :init (marginalia-mode))
 
-(use-package corfu
-  :init
-  (global-corfu-mode)
-  :custom
-  (corfu-cycle t)
-  (corfu-preview-current nil)
-  (corfu-quit-no-match t)
+;; I would use corfu but it's compeletely broken with the nixos emacs overlay
+;; because of some bytecompiler problem or whatever nonsense 27/09/2023
+(use-package company
+  :hook (prog-mode . company-mode)
   :config
-  (corfu-popupinfo-mode)
-  (setq tab-always-indent 'complete))
+  (setq company-idle-delay 0.8))
 
-(use-package kind-icon
-  :after corfu
-  :custom
-  (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
-  :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
-
-(use-package cape
-  ;; Bind dedicated completion commands
-  ;; Alternative prefix keys: C-c p, M-p, M-+, ...
-  :bind (("TAB" . completion-at-point) ;; capf
-         ("C-c p t" . complete-tag)        ;; etags
-         ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
-         ("C-c p h" . cape-history)
-         ("C-c p f" . cape-file)
-         ("C-c p k" . cape-keyword)
-         ("C-c p s" . cape-symbol)
-         ("C-c p a" . cape-abbrev)
-         ("C-c p i" . cape-ispell)
-         ("C-c p l" . cape-line)
-         ("C-c p w" . cape-dict)
-         ("C-c p \\" . cape-tex)
-         ("C-c p _" . cape-tex)
-         ("C-c p ^" . cape-tex)
-         ("C-c p &" . cape-sgml)
-         ("C-c p r" . cape-rfc1345))
-  :init
-  ;; Add `completion-at-point-functions', used by `completion-at-point'.
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev) ;; Remove in v29
-  (add-to-list 'completion-at-point-functions #'cape-history)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
-  (add-to-list 'completion-at-point-functions #'cape-tex)
-  (add-to-list 'completion-at-point-functions #'cape-sgml)
-  (add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  (add-to-list 'completion-at-point-functions #'cape-abbrev)
-  (add-to-list 'completion-at-point-functions #'cape-ispell)
-  (add-to-list 'completion-at-point-functions #'cape-dict)
-  (add-to-list 'completion-at-point-functions #'cape-symbol)
-  :config
-  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
-  (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify))
+;; Also broken for the same reason as corfu
+;; (use-package company-box
+;;   :hook (company-mode . company-box-mode)
+;;   :after company)
 
 (use-package eglot ;; Built-in by v29
   :hook (prog-mode . eglot-ensure))
 
-;; (use-package lsp-java)
+;; Language specific package
 
 (use-package haskell-mode)
-(use-package nix-mode :mode "\\.nix\\'")
+
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+(use-package ess)
+
+(use-package merlin)
+(use-package tuareg
+  :after merlin)
 
 ;; Vim mode
 
@@ -265,10 +224,6 @@
   :after evil
   :diminish anzu-mode
   :init (global-anzu-mode))
-
-(use-package evil-easymotion ;; Replace with custom tree-sitter evil text obj
-  :after evil
-  :config (evilem-default-keybindings "SPC"))
 
 (use-package evil-exchange
   :after evil
