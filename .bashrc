@@ -2,6 +2,41 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+#--- Vimsync ---#
+
+# Cleanup
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.local/cache"
+export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
+
+# Defaults
+export EDITOR="vim"
+export PAGER="less"
+export BROWSER="firefox"
+
+# Keyboard
+set -o vi
+alias 9="setxkbmap fr -option caps:swapescape; xmodmap -e 'keycode 135 = Super_R'"
+alias 1="xkbcomp $HOME/.config/xkb/latin-programmer-dvorak $DISPLAY; xmodmap -e 'keycode 135 = Super_R'"
+
+# Aliases
+alias conf="cd $XDG_CONFIG_HOME"
+alias share="cd $XDG_DATA_HOME"
+alias cache="cd $XDG_CACHE_HOME"
+alias bin='cd ~/.local/bin'
+
+# Colors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors/dracula)"
+alias ls='ls --color=auto --group-directories-first'
+alias grep='grep --color'
+alias diff='diff --color=auto'
+alias cd='c'
+
+# I just set env vars here because I don't want to translate it to fish :p
+fish
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
@@ -77,40 +112,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-#--- Vimsync ---#
-
-# Cleanup
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_CACHE_HOME="$HOME/.local/cache"
-export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
-
-# Defaults
-export EDITOR="vim"
-export PAGER="less"
-export BROWSER="firefox"
-
-# Keyboard
-set -o vi
-alias 9="setxkbmap fr -option caps:swapescape; xmodmap -e 'keycode 135 = Super_R'"
-alias 1="xkbcomp $HOME/.config/xkb/latin-programmer-dvorak $DISPLAY; xmodmap -e 'keycode 135 = Super_R'"
-
-# Aliases
-alias conf="cd $XDG_CONFIG_HOME"
-alias share="cd $XDG_DATA_HOME"
-alias cache="cd $XDG_CACHE_HOME"
-alias bin='cd ~/.local/bin'
-
-# Colors
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors/dracula)"
-alias ls='ls --color=auto --group-directories-first'
-alias grep='grep --color'
-alias diff='diff --color=auto'
-alias cd='c'
-
-c()
-{
-	builtin cd "$@" && ls -lAh --group-directories-first;
-}
