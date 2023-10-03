@@ -32,7 +32,6 @@ eval "$(dircolors "$XDG_CONFIG_HOME"/dircolors/dracula)"
 alias ls='ls --color=auto --group-directories-first'
 alias grep='grep --color'
 alias diff='diff --color=auto'
-alias cd='c'
 
 # I just set env vars here because I don't want to translate it to fish :p
 fish
