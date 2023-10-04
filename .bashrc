@@ -4,6 +4,9 @@
 
 #--- Vimsync ---#
 
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
 # Cleanup
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -34,10 +37,6 @@ alias grep='grep --color'
 alias diff='diff --color=auto'
 
 # I just set env vars here because I don't want to translate it to fish :p
-fish
-
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
 
 HISTCONTROL=ignoreboth
 HISTSIZE=1000
@@ -111,3 +110,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# I can't change the default shell on school computers so I just open fish here instead
+fish
