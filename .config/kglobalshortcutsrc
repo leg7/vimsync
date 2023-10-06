@@ -2,6 +2,7 @@
 _k_friendly_name=Gestion des activités
 switch-to-activity-5bda342f-25cc-4b60-b63c-887409dc3852=none,none,Passer à l'activité « Défaut »
 switch-to-activity-5f5254cf-c22d-4fb7-b76e-2131a07dbe3b=none,none,Passer à l'activité « Défaut »
+switch-to-activity-97a713c4-f500-4ae6-9a42-aa9c6148d9cb=none,none,Passer à l'activité « Défaut »
 switch-to-activity-c559f058-6395-4f30-9fc7-9ba6c80f54d9=none,none,Passer à l'activité « Défaut »
 
 [KDE Keyboard Layout Switcher]
@@ -26,7 +27,7 @@ display=Display,Display\tMeta+P,Changer d'affichage
 
 [khotkeys]
 _k_friendly_name=Service personnalisé de raccourcis\s
-{0fdbe446-2cb3-4860-b403-6e4dbffc6082}=Meta+Shift+B,none,browser
+{0fdbe446-2cb3-4860-b403-6e4dbffc6082}=Meta+B,none,browser
 {6966ac74-bdf5-4ddd-9b6f-28b045b11e7c}=,none,Launch Konsole
 {c86a4eff-b306-4ceb-909a-ab2835a94538}=Meta+T,none,term
 {d03619b6-9b3c-48cc-9d9c-a2aadb485550}=,none,Rechercher
@@ -129,17 +130,17 @@ Walk Through Windows of Current Application Alternative (Reverse)=none,none,Navi
 Window Above Other Windows=none,none,Conserver une fenêtre au-dessus des autres
 Window Below Other Windows=none,none,Conserver une fenêtre au-dessous des autres
 Window Close=Meta+Backspace\tAlt+F4,Alt+F4,Fermer une fenêtre
-Window Fullscreen=Meta+F,none,Mettre une fenêtre en plein écran
+Window Fullscreen=Meta+Shift+F,none,Mettre une fenêtre en plein écran
 Window Grow Horizontal=none,none,Empiler horizontalement une fenêtre en croissance
 Window Grow Vertical=none,none,Empiler verticalement une fenêtre en croissance
 Window Lower=none,none,Enrouler une fenêtre
-Window Maximize=Meta+PgUp\tMeta+B,Meta+PgUp,Maximiser une fenêtre
+Window Maximize=Meta+F,Meta+PgUp,Maximiser une fenêtre
 Window Maximize Horizontal=none,none,Maximiser horizontalement une fenêtre
 Window Maximize Vertical=none,none,Maximiser verticalement une fenêtre
 Window Minimize=Meta+PgDown,Meta+PgDown,Réduire une fenêtre
 Window Move=none,none,Déplacer une fenêtre
 Window No Border=none,none,Cacher une bordure de fenêtre
-Window On All Desktops=none,none,Conserver une fenêtre sur tous les bureaux
+Window On All Desktops=Meta+S,none,Conserver une fenêtre sur tous les bureaux
 Window One Desktop Down=none,none,Envoyer une fenêtre sur le bureau en dessous
 Window One Desktop Up=none,none,Envoyer une fenêtre sur le bureau au-dessus
 Window One Desktop to the Left=none,none,Envoyer une fenêtre sur le bureau à gauche

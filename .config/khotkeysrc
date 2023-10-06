@@ -933,7 +933,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_5Triggers0]
-Key=Meta+Shift+B
+Key=Meta+B
 Type=SHORTCUT
 Uuid={0fdbe446-2cb3-4860-b403-6e4dbffc6082}
 
