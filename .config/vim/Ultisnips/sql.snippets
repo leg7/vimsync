@@ -274,33 +274,37 @@ endsnippet
 #=================
 
 snippet trigger "Trigger block"
+DROP TRIGGER IF EXISTS tr${1:TriggerName} ON ${2:table};
 
-DROP TRIGGER IF EXISTS trig_Apres_DI_${1:TriggerName} ON ${2:table};
-DROP FUNCTION IF EXISTS DI_$1();
-
-CREATE OR REPLACE FUNCTION DI_$1() returns TRIGGER AS $$
+CREATE OR REPLACE FUNCTION trFun$1() returns TRIGGER AS $$
 BEGIN
 	IF (TG_OP = 'INSERT') THEN
-		UPDATE ${3:table} SET ${4:attr} = $4 + (new.$4 - old.$4) WHERE ${5:attrCdt} = new.$5;
+		UPDATE ${3:table}
+		SET ${4:attr} = $5 + (new.$6 - old.$7)
+		WHERE ${8:attrCdt} = new.$9;
+
 		RETURN new;
-	ELSE IF (TG_OP = 'DELETE') THEN
+	ELSIF (TG_OP = 'DELETE') THEN
 		RETURN old;
 	ELSE
 		-- UPDATE ON
 		-- new.param = la nouvelle valeur de table.param
 		-- old.param = l'ancien valeur de table.param
-		UPDATE ${6:table} SET ${7:attr} = $7 + (new.$7 - old.$7) WHERE ${0:attrCdt} = new.$0;
+		UPDATE ${10:table}
+		SET ${11:attr} = $12 + (new.$13 - old.$14)
+		WHERE ${0:attrCdt} = new.$15;
+
 		RETURN new;
 	END IF;
 END;
 $$ language plpgsql;
 
-CREATE TRIGGER trig_Apres_DI_$1 before
-INSERT OR
-DELETE OR
-UPDATE ON
-$2
-FOR each ROW EXECUTE PROCEDURE DI_$1();
+CREATE TRIGGER tr$1
+BEFORE INSERT
+OR DELETE
+OR UPDATE
+ON $2
+FOR each ROW EXECUTE PROCEDURE trFun$1();
 endsnippet
 
 #=================
