@@ -59,6 +59,7 @@ Plug 'SirVer/ultisnips'  , { 'for': ['vim-plug', 'python', 'cpp', 'c','css', 'ht
 Plug 'honza/vim-snippets', { 'for': ['vim-plug', 'python', 'cpp', 'c','css', 'html', 'sql'] }
 
 " Buffers, workflow
+Plug '907th/vim-auto-save'
 Plug 'Konfekt/FastFold'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
@@ -159,10 +160,13 @@ endif
 if has('persistent_undo')       " You can undo changes across sessions
 	set undolevels=5000
 	set autowriteall undofile autoread
+	set noswapfile
 else
+	redraw
 	echom "Your system doesn't support persistent undo ! Be careful !"
+	set updatecount=10
 endif
-set updatecount=10
+let g:auto_save = 1
 
 " Folds
 if has('folding')
