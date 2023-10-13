@@ -359,9 +359,13 @@ nmap <Leader>c] <Plug>lightline#bufferline#delete(10)
 " Automatically create drop statement at the head of the file for current line
 func DropTemplate()
 	if getline(".") =~? "CREATE TRIGGER"
-		exe "normal 0wy2eggODROP \<Esc>pbiIF EXISTS \<Esc>A;\<Esc>''j$vbbhygg$P"
+		exe "normal 0wy2eggODROP \<Esc>pbiIF EXISTS \<Esc>A;\<Esc>''j$vbbhygg$P''zz"
+		redraw
+		echom 'Drop statement added'
 	elseif getline(".") =~? "CREATE"
-		exe "normal 0wy2eggODROP \<Esc>pbiIF EXISTS \<Esc>A;\<Esc>"
+		exe "normal 0wy2eggODROP \<Esc>pbiIF EXISTS \<Esc>A;\<Esc>''zz"
+		redraw
+		echom 'Drop statement added'
 	endif
 endfunc
 map <leader>fd :call DropTemplate()<CR>
