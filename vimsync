@@ -60,7 +60,7 @@ if $local_mode; then
 		if ! test -d nvim-linux-x86_64; then
 			tar xpf nvim-linux-x86_64.tar.gz
 		fi
-		cp nvim-linux-x86_64 ~/.local/bin
+		cp -r nvim-linux-x86_64 ~/.local/bin
 		ln -sf ~/.local/bin/nvim-linux-x86_64/bin/nvim ~/.local/bin/nvim
 
 		if $mpi; then
