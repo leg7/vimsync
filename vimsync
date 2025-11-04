@@ -41,10 +41,36 @@ if $local_mode; then
 		cp -ir .bashrc .config .local "$HOME"
 	fi
 
-	xkbcomp "$HOME"/.config/xkb/latin-programmer-dvorak "$DISPLAY"
+	mkdir downloads
+	(
+		cd downloads
+
+		mkdir -p ~/.local/bin
+
+		# Install latest neovim because university one is super old and doesn't even support lazy.nvim
+		wget -nc 'https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.tar.gz'
+		if ! test -d nvim-linux-x86_64; then
+			tar xpf nvim-linux-x86_64.tar.gz
+		fi
+		cp nvim-linux-x86_64/bin/nvim ~/.local/bin
+
+		wget -nc 'https://addons.mozilla.org/firefox/downloads/file/4047348/vimium_c-1.99.995.xpi' 'https://addons.mozilla.org/firefox/downloads/file/3632463/newtab_adapter-1.3.0.xpi'
+		setsid -f firefox vimium_c-1.99.995.xpi newtab_adapter-1.3.0.xpi &
+
+		openmpi='openmpi-4.1.8'
+		wget -nc "https://download.open-mpi.org/release/open-mpi/v4.0/$openmpi.tar.bz2"
+		if ! test -d "$openmpi"; then
+			tar xpf "$openmpi".tar.bz2
+		fi
+		(
+			cd "$openmpi"
+			./configure prefix="$HOME/.local" --disable-debug-symbols --enable-mpi-cxx
+			make -j$(nproc) install
+		)
+	)
+
+	xkbcomp -w 0 "$HOME"/.config/xkb/latin-programmer-dvorak "$DISPLAY"
 	xmodmap -e 'keycode 135 = Super_R'
-	wget https://addons.mozilla.org/firefox/downloads/file/4047348/vimium_c-1.99.995.xpi https://addons.mozilla.org/firefox/downloads/file/3632463/newtab_adapter-1.3.0.xpi
-	setsid -f firefox vimium_c-1.99.995.xpi newtab_adapter-1.3.0.xpi &
 	printf "\nPlease restart the computer for changes to take effect"
 else
 	bad_option

@@ -1,37 +1,97 @@
 if status is-login
-	eval (dircolors -c "$XDG_CONFIG_HOME"/dircolors/dracula | string replace 'setenv' 'set -x')
-	# set -x GCC_COLORS 'error 01;31:warning 01;35:note 01;36:caret 01;32:locus 01:quote 01'
-	# set -x FZF_DEFAULT_OPTS ' --color fg:#f8f8f2,bg:#282a36,hl:#bd93f9
-	# --color fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9
-	# --color info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6
-	# --color marker:#ff79c6,spinner:#ffb86c,header:#6272a4
-	# --layout reverse
-	# --height 20%'
+	set -U fish_greeting
 
-	if test -z "$DISPLAY" && test (tty) = /dev/tty1
-		Hyprland-wrapper
+	set -gx LESS "Ri" # Less default options (inhibits git from calling less with -F and -R)
+	set -gx BROWSER "firefox"
+	set -gx EDITOR "nvim"
+
+	set -gx ASAN_OPTIONS "halt_on_error=0"
+	set -gx FZF_DEFAULT_OPTS "--ansi --layout reverse --color fg:-1,fg+:-1,bg:-1,bg+:-1,hl:-1,hl+:-1,query:-1,gutter:-1"
+
+	set -gx LS_COLORS 'di=1;35:fi=0:ln=1;31:pi=5:so=5:bd=5:cd=5:or=4:ex=1;36'
+
+	# XDG
+
+	set -gx LOCAL_HOME "$HOME/.local"
+	set -gx XDG_CACHE_HOME "$LOCAL_HOME/cache"
+	set -gx XDG_CONFIG_HOME "$HOME/.config"
+	set -gx XDG_DATA_HOME "$LOCAL_HOME/share"
+	set -gx XDG_STATE_HOME "$LOCAL_HOME/state"
+	set -gx BIN_HOME "$LOCAL_HOME/bin"
+	set -gx PATH "$PATH:$BIN_HOME"
+	if test -z "$XDG_RUNTIME_DIR"
+		set -gx XDG_RUNTIME_DIR (mktemp -d "$XDG_STATE_HOME/$(id -u)-runtime-dir.XXX")
+	end
+	set -gx XDG_DESKTOP_DIR "$HOME"
+	set -gx XDG_DOCUMENTS_DIR "$HOME/documents"
+	set -gx XDG_DOWNLOAD_DIR "$HOME"
+	set -gx XDG_MUSIC_DIR "$HOME/audio"
+	set -gx XDG_PICTURES_DIR "$HOME/pics"
+	set -gx XDG_PUBLICSHARE_DIR "$HOME/share"
+	set -gx XDG_TEMPLATES_DIR "$HOME"
+	set -gx XDG_VIDEOS_DIR "$HOME/vids"
+	mkdir -p "$XDG_DESKTOP_DIR" \
+		"$XDG_DOCUMENTS_DIR" \
+		"$XDG_DOWNLOAD_DIR" \
+		"$XDG_MUSIC_DIR" \
+		"$XDG_PICTURES_DIR" \
+		"$XDG_PUBLICSHARE_DIR" \
+		"$XDG_TEMPLATES_DIR" \
+		"$XDG_VIDEOS_DIR"
+
+	set -gx WGETRC "$XDG_CONFIG_HOME/wgetrc"
+	set -gx XCURSOR_PATH "$XCURSOR_PATH:$XDG_DATA_HOME/icons:/usr/share/icons"
+	set -gx PASSWORD_STORE_DIR "$XDG_DATA_HOME/pass"
+	set -gx MBSYNCRC "$XDG_CONFIG_HOME/isync/mbsyncrc"
+	set -gx GNUPGHOME "$XDG_DATA_HOME/gnupg"
+	set -gx NPM_CONFIG_USERCONFIG "$XDG_CONFIG_HOME/npm/npmrc"
+	set -gx GHCUP_USE_XDG_DIRS "true"
+	set -gx STARSHIP_CACHE "$XDG_CACHE_HOME/starship"
+	set -gx CUDA_CACHE_PATH "$XDG_CACHE_HOME/nv"
+	set -gx WINEPREFIX "$XDG_DATA_HOME/wine"
+	set -gx CARGO_HOME "$XDG_DATA_HOME/cargo"
+	set -gx CARGO_INSTALL_ROOT "$LOCAL_HOME"
+	set -gx ANDROID_USER_HOME "$XDG_DATA_HOME/android"
+	set -gx GRADLE_USER_HOME "$XDG_DATA_HOME/gradle"
+	set -gx LEIN_HOME "$XDG_DATA_HOME/lein"
+	set -gx _JAVA_OPTIONS "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
+	set -gx GOPATH "$LOCAL_HOME"
+
+	if test (tty) = "/dev/tty1"
+		dbus-run-session river
 	end
 end
 
+function fzf-cd
+	cd (fd -t d | fzf)
+end
+
+function fzf-path
+	readlink -f (fd | fzf) | tr -d '\n\r'
+end
+
+function fzf-copy-path
+	fzf-path | wl-copy
+end
+
+function fzf-xdg-open
+	setsid -f xdg-open (fzf-path)
+end
+
+function fzf-history
+	history search | fzf | wl-copy
+end
+
 if status is-interactive
-	set -U fuzzy_exclude \( -name '.mozilla' -o -name 'qmk_firmware' -o -name 'Signal' -o -name '.nix-defexpr' -o -regex '.*\(c\|C\)ache.*' -o -name '.git' \) -prune -o
+	for mode in default normal insert
+		bind -M $mode \cg "setsid -f xdg-open ." # g for gui
 
-	fish_vi_key_bindings
-	# This should be equivalent te fish_vi_cursor
-	set fish_cursor_default block
-	set fish_cursor_insert line
-	set fish_cursor_replace_one underscore
-	set fish_cursor_visual block
-
-	for mode in default normal insert 
-		# I would just use open but right now it opens it in the browser too and segfaults.
-		# I'll switch to it once I use home-manager in nixos and mimeapps work correctly
-		bind -M $mode \cg "dolphin ." # g for gui
-
-		bind -M $mode \cr "printf '\n'; fuzzy-cd; commandline -f repaint" # r stand for directory in french
-		bind -M $mode \ch "printf '\n'; fuzzy-history; commandline -f repaint"
-		bind -M $mode \cf "printf '\n'; fuzzy-files; commandline -f repaint"
-		bind -M $mode \cp "printf '\n'; fuzzy-path; commandline -f repaint"
+		bind -M $mode 'ctrl-w' "fzf-cd; commandline -f repaint" # w for working dir
+		bind -M $mode 'ctrl-h' "fzf-history; commandline -f repaint"
+		bind -M $mode 'ctrl-p' "fzf-copy-path; commandline -f repaint"
+		bind -M $mode 'ctrl-f' "fzf-xdg-open; commandline -f repaint"
+		bind -M $mode 'alt-l' "ls -lahv --group-directories-first; fish_prompt"
+		bind -M $mode 'alt-t' "tree -L 3; fish_prompt"
 	end
 
 	bind -M insert \ca "accept-autosuggestion" # a for accept
