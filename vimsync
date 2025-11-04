@@ -94,7 +94,7 @@ if $local_mode; then
 		xkbcomp -w 0 "$HOME"/.config/xkb/latin-programmer-dvorak "$DISPLAY"
 		xmodmap -e 'keycode 135 = Super_R'
 	fi
-	printf "\nPlease restart the computer for changes to take effect"
+	printf "\nPlease restart the computer for changes to take effect\n"
 else
 	bad_option
 fi
