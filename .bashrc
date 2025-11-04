@@ -14,12 +14,10 @@ export XDG_CACHE_HOME="$HOME/.local/cache"
 export PATH="$HOME/.local/bin:$PATH"
 
 # Defaults
-export EDITOR="vim"
 export PAGER="less"
 export BROWSER="firefox"
 
 # Keyboard
-set -o vi
 alias 9="setxkbmap fr -option caps:swapescape; xmodmap -e 'keycode 135 = Super_R'"
 alias dvorak="xkbcomp $HOME/.config/xkb/latin-programmer-dvorak $DISPLAY; xmodmap -e 'keycode 135 = Super_R'"
 

@@ -15,15 +15,17 @@ usage()
 	\t-l       : sync with local files (you need to have cloned the repo for this to work)
 	\t-f 	   : force the copy\n
 	\t-m       : recompile mpi to install it instead of using the precompiled binaries\n
-	\t-d       : Enable dvorak by default\n"
+	\t-d       : Enable dvorak by default\n
+	\t-v       : Enable vim mode in terminal and neovim as default editor\n"
 }
 
 local_mode=false
 force=false
 mpi=false
 dvorak=false
+neovim=false
 
-while getopts lfhmnd option; do
+while getopts lfhmndv option; do
 	case $option in
 		(l)
 			local_mode=true;;
@@ -33,6 +35,8 @@ while getopts lfhmnd option; do
 			mpi=true;;
 		(d)
 			dvorak=true;;
+		(v)
+			neovim=true;;
 		(h | *)
 			bad_option;;
 	esac
@@ -55,13 +59,22 @@ if $local_mode; then
 
 		mkdir -p ~/.local/bin
 
-		# Install latest neovim because university one is super old and doesn't even support lazy.nvim
-		wget -nc 'https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.tar.gz'
-		if ! test -d nvim-linux-x86_64; then
-			tar xpf nvim-linux-x86_64.tar.gz
+
+		if $neovim; then
+			# Install latest neovim because university one is super old and doesn't even support lazy.nvim
+			wget -nc 'https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.tar.gz'
+			if ! test -d nvim-linux-x86_64; then
+				tar xpf nvim-linux-x86_64.tar.gz
+			fi
+			cp -r nvim-linux-x86_64 ~/.local/bin
+			ln -sf ~/.local/bin/nvim-linux-x86_64/bin/nvim ~/.local/bin/nvim
+
+			echo 'set -o vi' >> ~/.bashrc
+			echo 'EDITOR=neovim' >> ~/.bashrc
+
+			wget -nc 'https://addons.mozilla.org/firefox/downloads/file/4047348/vimium_c-1.99.995.xpi' 'https://addons.mozilla.org/firefox/downloads/file/3632463/newtab_adapter-1.3.0.xpi'
+			setsid -f firefox vimium_c-1.99.995.xpi newtab_adapter-1.3.0.xpi &
 		fi
-		cp -r nvim-linux-x86_64 ~/.local/bin
-		ln -sf ~/.local/bin/nvim-linux-x86_64/bin/nvim ~/.local/bin/nvim
 
 		if $mpi; then
 			openmpi='openmpi-4.1.8'
@@ -75,9 +88,6 @@ if $local_mode; then
 				make -j$(nproc) install
 			)
 		fi
-
-		wget -nc 'https://addons.mozilla.org/firefox/downloads/file/4047348/vimium_c-1.99.995.xpi' 'https://addons.mozilla.org/firefox/downloads/file/3632463/newtab_adapter-1.3.0.xpi'
-		setsid -f firefox vimium_c-1.99.995.xpi newtab_adapter-1.3.0.xpi &
 	)
 
 	if "$dvorak"; then
