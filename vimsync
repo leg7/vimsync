@@ -14,12 +14,14 @@ usage()
 	\t-h       : show this help message
 	\t-l       : sync with local files (you need to have cloned the repo for this to work)
 	\t-f 	   : force the copy\n
-	\t-m       : recompile mpi to install it instead of using the precompiled binaries\n"
+	\t-m       : recompile mpi to install it instead of using the precompiled binaries\n
+	\t-d       : Enable dvorak by default\n"
 }
 
 local_mode=false
 force=false
 mpi=false
+dvorak=false
 
 while getopts lfhmn option; do
 	case $option in
@@ -29,6 +31,8 @@ while getopts lfhmn option; do
 			force=true;;
 		(m)
 			mpi=true;;
+		(d)
+			dvorak=true;;
 		(h | *)
 			bad_option;;
 	esac
@@ -45,7 +49,7 @@ if $local_mode; then
 		cp -ir .bashrc .config .local "$HOME"
 	fi
 
-	mkdir downloads
+	mkdir -p downloads
 	(
 		cd downloads
 
@@ -76,8 +80,10 @@ if $local_mode; then
 		setsid -f firefox vimium_c-1.99.995.xpi newtab_adapter-1.3.0.xpi &
 	)
 
-	xkbcomp -w 0 "$HOME"/.config/xkb/latin-programmer-dvorak "$DISPLAY"
-	xmodmap -e 'keycode 135 = Super_R'
+	if "$dvorak"; then
+		xkbcomp -w 0 "$HOME"/.config/xkb/latin-programmer-dvorak "$DISPLAY"
+		xmodmap -e 'keycode 135 = Super_R'
+	fi
 	printf "\nPlease restart the computer for changes to take effect"
 else
 	bad_option
