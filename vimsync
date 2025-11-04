@@ -14,14 +14,12 @@ usage()
 	\t-h       : show this help message
 	\t-l       : sync with local files (you need to have cloned the repo for this to work)
 	\t-f 	   : force the copy\n
-	\t-m       : recompile mpi to install it instead of using the precompiled binaries\n
-	\t-n       : redownload latest neovim instead of using available binary\n"
+	\t-m       : recompile mpi to install it instead of using the precompiled binaries\n"
 }
 
 local_mode=false
 force=false
 mpi=false
-neovim=false
 
 while getopts lfhmn option; do
 	case $option in
@@ -31,8 +29,6 @@ while getopts lfhmn option; do
 			force=true;;
 		(m)
 			mpi=true;;
-		(n)
-			neovim=true;;
 		(h | *)
 			bad_option;;
 	esac
@@ -55,14 +51,13 @@ if $local_mode; then
 
 		mkdir -p ~/.local/bin
 
-		if $neovim; then
-			# Install latest neovim because university one is super old and doesn't even support lazy.nvim
-			wget -nc 'https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.tar.gz'
-			if ! test -d nvim-linux-x86_64; then
-				tar xpf nvim-linux-x86_64.tar.gz
-			fi
-			cp nvim-linux-x86_64/bin/nvim ~/.local/bin
+		# Install latest neovim because university one is super old and doesn't even support lazy.nvim
+		wget -nc 'https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.tar.gz'
+		if ! test -d nvim-linux-x86_64; then
+			tar xpf nvim-linux-x86_64.tar.gz
 		fi
+		cp nvim-linux-x86_64 ~/.local/bin
+		ln -sf ~/.local/bin/nvim-linux-x86_64/bin/nvim ~/.local/bin/nvim
 
 		if $mpi; then
 			openmpi='openmpi-4.1.8'
