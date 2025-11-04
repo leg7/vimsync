@@ -21,7 +21,7 @@ export BROWSER="firefox"
 # Keyboard
 set -o vi
 alias 9="setxkbmap fr -option caps:swapescape; xmodmap -e 'keycode 135 = Super_R'"
-alias 1="xkbcomp $HOME/.config/xkb/latin-programmer-dvorak $DISPLAY; xmodmap -e 'keycode 135 = Super_R'"
+alias dvorak="xkbcomp $HOME/.config/xkb/latin-programmer-dvorak $DISPLAY; xmodmap -e 'keycode 135 = Super_R'"
 
 # Aliases
 alias conf="cd $XDG_CONFIG_HOME"
