@@ -23,7 +23,7 @@ force=false
 mpi=false
 dvorak=false
 
-while getopts lfhmn option; do
+while getopts lfhmnd option; do
 	case $option in
 		(l)
 			local_mode=true;;
